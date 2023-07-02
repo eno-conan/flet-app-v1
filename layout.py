@@ -135,6 +135,7 @@ class ResponsiveMenuLayout(Row):
         self.page.update()
 
     def _change_displayed_page(self):
+        # print(self.page.auth['user'])
         # 以下の実装のような形にしてもいいかもしれない
         #   if troute.match("/"):
         #     self.page.go("/boards")
@@ -154,11 +155,11 @@ class ResponsiveMenuLayout(Row):
         if self._support_routes:
             self.page.route = self.routes[page_number]
             if (page_number == 1):
-                pass
-                # print(self.content_area.controls[-1])
+                if self.page.auth is None:
+                    self.content_area.controls[-2] = Text("Update")
             if (page_number == 2):
-                pass
-                # self.content_area.controls[-1] = Text("Update")
+                if self.page.auth is None:
+                    self.content_area.controls[-1] = Text("Update")
         for i, content_page in enumerate(self.content_area.controls):
             content_page.visible = page_number == i
 

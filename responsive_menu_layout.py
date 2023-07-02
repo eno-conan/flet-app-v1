@@ -17,6 +17,13 @@ from flet import (
 from layout import ResponsiveMenuLayout
 from time import sleep
 
+from flet.auth.providers.google_oauth_provider import GoogleOAuthProvider
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+ClientID = os.getenv('ClientID')
+ClientSecret = os.getenv('ClientSecret')
 
 if __name__ == "__main__":
 
@@ -117,11 +124,51 @@ if __name__ == "__main__":
 
     # main_contentsのレイアウトをこれで統一している
     def create_page(page: Page, title: str, body: str):
+        # ページによって表示内容を更新できるようにする
         if title == "Menu in landscape":
             # base
-            contents = Column(expand=True,auto_scroll=False)
+            provider = GoogleOAuthProvider(
+                client_id=ClientID,
+                client_secret=ClientSecret,
+                redirect_url="http://localhost:8550/api/oauth/redirect"
+            )
+
+            auth_result_text = Column()
+
+            def login_google(e):
+                page.login(provider)
+
+            def logout_google(e):
+                page.logout()
+
+            def on_login(e):
+                print(page.auth.user)
+                contents.controls.remove(log_inout_button)
+                auth_result_text.controls.append(
+                    Column([
+                        ElevatedButton(
+                            "Sign out Google", bgcolor="blue", color="white", on_click=logout_google),
+                        Text(f"name:{page.auth.user['name']}"),
+                        Text(f"name:{page.auth.user['email']}"),
+                    ])
+                )
+                page.update()
+
+            page.on_login = on_login
+
+            contents = Column(expand=True, auto_scroll=False)
             # # page title
             contents.controls.append(ft.Text("一覧画面", size=30, weight="bold"),)
+            # ログイン処理
+            log_inout_button = ElevatedButton()
+            # contents.controls.append(log_inout_button)
+            # contents.controls.remove(log_inout_button)
+            if page.auth is None:
+                log_inout_button = ElevatedButton(
+                    "Sign Google", bgcolor="blue", color="white", on_click=login_google)
+            contents.controls.append(log_inout_button)
+            # 認証結果表示欄
+            contents.controls.append(auth_result_text)
             # # contents
             lv = ft.ListView(expand=True, spacing=15, auto_scroll=False)
             for _ in range(15):
@@ -216,8 +263,6 @@ if __name__ == "__main__":
             contents.controls.append(submit_button)
 
             return contents
-            # page.add(lv) #今更だけど、page.addって何？
-            # https://flet.dev/docs/guides/python/getting-started
         else:
             return Row(
                 controls=[

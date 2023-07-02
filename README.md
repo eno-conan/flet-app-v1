@@ -1,15 +1,8 @@
 # ResponsiveMenuLayout
+page.add(lv) #今更だけど、page.addって何？
 
-ResponsiveMenuLayout creates a left panel menu using NavigationRail. It's main feature is that it
-reacts to window size changes, and typically hides the menu when in portrait orientation (usually
-a phone).
+https://flet.dev/docs/guides/python/getting-started
 
-The AppBar in this demo app is not a part of the ResponsiveMenuLayout component. Here the main
-menu button is used to toggle menu visibility, but you can have other toggles, maybe swiping once
-we have gesture support in flet.
-
-You can `from responsive_menu_layout import ResponsiveMenuLayout` to use it as a component in your
-own code, or run the file to see the demo.
 
 ## Features
 
