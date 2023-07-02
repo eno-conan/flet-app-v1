@@ -148,11 +148,6 @@ if __name__ == "__main__":
                         margin=10
                     )
                 ))
-            # lv = ft.ListView(expand=True, spacing=10, padding=20, auto_scroll=False)
-            # count = 1
-            # for i in range(0, 60):
-            #     lv.controls.append(ft.Text(f"Line {count}"))
-            #     count += 1
 
             contents.controls.append(lv)
 
@@ -250,4 +245,4 @@ if __name__ == "__main__":
     #     menu.menu_extended = not menu.menu_extended
     #     menu.page.update()
 
-    ft.app(target=main, port=8080, view=ft.WEB_BROWSER)
+    ft.app(target=main, port=8550, view=ft.WEB_BROWSER)

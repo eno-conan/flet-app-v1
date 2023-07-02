@@ -135,6 +135,7 @@ class ResponsiveMenuLayout(Row):
         self.page.update()
 
     def _change_displayed_page(self):
+        # 以下の実装のような形にしてもいいかもしれない
         #   if troute.match("/"):
         #     self.page.go("/boards")
         # elif troute.match("/board/:id"):
@@ -148,7 +149,6 @@ class ResponsiveMenuLayout(Row):
         #     self.layout.set_members_view()
         # self.page.update()
         # クリックしたタブに合わせて表示内容更新
-        # print("_change_displayed_page")
         page_number = self.navigation_rail.selected_index
         # ここはタブを変える度に実行できるから、ここでデータ取得する処理を入れ
         if self._support_routes:
