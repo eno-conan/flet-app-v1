@@ -4,6 +4,9 @@ page.add(lv) #今更だけど、page.addって何？
 https://flet.dev/docs/guides/python/getting-started
 
 
+https://rollbar.com/blog/python-typeerror-nonetype-object-not-subscriptable/
+
+
 ## Features
 
 **Basic landscape layout, menu shown by default**

@@ -16,6 +16,8 @@ from flet import (
 )
 from layout import ResponsiveMenuLayout
 from time import sleep
+from google_auth import GoogleOAuth
+from text_fields import TextFieldsAndSubmit
 
 from flet.auth.providers.google_oauth_provider import GoogleOAuthProvider
 import os
@@ -122,54 +124,17 @@ if __name__ == "__main__":
 
         menu_button.on_click = lambda e: menu_layout.toggle_navigation()
 
-    # main_contentsのレイアウトをこれで統一している
+    # main_contentsのレイアウトをこれで統一
     def create_page(page: Page, title: str, body: str):
         # ページによって表示内容を更新できるようにする
         if title == "Menu in landscape":
-            # base
-            provider = GoogleOAuthProvider(
-                client_id=ClientID,
-                client_secret=ClientSecret,
-                redirect_url="http://localhost:8550/api/oauth/redirect"
-            )
-
-            auth_result_text = Column()
-
-            def login_google(e):
-                page.login(provider)
-
-            def logout_google(e):
-                page.logout()
-
-            def on_login(e):
-                print(page.auth.user)
-                contents.controls.remove(log_inout_button)
-                auth_result_text.controls.append(
-                    Column([
-                        ElevatedButton(
-                            "Sign out Google", bgcolor="blue", color="white", on_click=logout_google),
-                        Text(f"name:{page.auth.user['name']}"),
-                        Text(f"name:{page.auth.user['email']}"),
-                    ])
-                )
-                page.update()
-
-            page.on_login = on_login
-
+            # ベースとなるコンテンツ
             contents = Column(expand=True, auto_scroll=False)
-            # # page title
+            # page title
             contents.controls.append(ft.Text("一覧画面", size=30, weight="bold"),)
-            # ログイン処理
-            log_inout_button = ElevatedButton()
-            # contents.controls.append(log_inout_button)
-            # contents.controls.remove(log_inout_button)
-            if page.auth is None:
-                log_inout_button = ElevatedButton(
-                    "Sign Google", bgcolor="blue", color="white", on_click=login_google)
-            contents.controls.append(log_inout_button)
-            # 認証結果表示欄
-            contents.controls.append(auth_result_text)
-            # # contents
+            # ログイン処理のための画面要素
+            GoogleOAuth(page, contents)
+            # カード一覧表示
             lv = ft.ListView(expand=True, spacing=15, auto_scroll=False)
             for _ in range(15):
                 lv.controls.append(ft.Card(
@@ -197,71 +162,11 @@ if __name__ == "__main__":
                 ))
 
             contents.controls.append(lv)
-
             return contents
         elif title == "Menu in portrait":
-            # base
+            # ベースとなるコンテンツ
             contents = Column()
-
-            def button_clicked(e):
-                # if (len(company_name_textfield.value) == 0 or len(contract_name_textfield.value) == 0):
-                #     page.update()
-                #     return
-                # create POST request
-                try:
-                    # url = os.getenv('WORKERS_URL')
-                    # data = {
-                    #     'CompanyName': company_name_textfield.value,
-                    #     'ContactName': contract_name_textfield.value,
-                    # }
-                    # data_encode = json.dumps(data)
-                    # requests.post(url, data=data_encode)
-                    # # clear input values
-                    company_name_textfield.value = ""
-                    contract_name_textfield.value = ""
-                    # submit_button.disabled = True
-                    # msg_failed_add_customer.visible = False
-                    # msg_success_add_customer.visible = True
-                    page.update()
-                    # トーストの使い方が特殊な印象
-                    # Container(content=Toast(
-                    #     page,
-                    #     icons.PERSON_SHARP,
-                    #     "Toast title",
-                    #     "Toast description",
-                    #     submit_button,
-                    #     ft.colors.AMBER_500,
-                    #     auto_close=10
-                    # ).struct()
-                    # page.go('/')
-                    # msg_success_add_customer.visible = False
-                except Exception as e:
-                    print(e)
-                    # msg_failed_add_customer.visible = True
-                    # page.update()
-
-            def textfield_change(e):
-                if company_name_textfield.value == "" or contract_name_textfield.value == "":
-                    submit_button.disabled = True
-                else:
-                    submit_button.disabled = False
-                page.update()
-
-            submit_button = ft.ElevatedButton(
-                disabled=True,
-                text="Submit", on_click=button_clicked)
-
-            # text fields
-            company_name_textfield = ft.TextField(
-                label="Company Name", on_change=textfield_change)
-            contract_name_textfield = ft.TextField(
-                label="Contract Name", on_change=textfield_change)
-            # まとめ方が悪いのかもしれないけど、以下でまとめると、テキストフィールドに値を入力してもSubmitボタンが活性状態にならない
-            # Container(Column(controls=[company_name_textfield,company_name_textfield]))
-            contents.controls.append(company_name_textfield)
-            contents.controls.append(contract_name_textfield)
-            contents.controls.append(submit_button)
-
+            TextFieldsAndSubmit(page, contents)
             return contents
         else:
             return Row(

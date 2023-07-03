@@ -22,42 +22,66 @@ load_dotenv()
 ClientID = os.getenv('ClientID')
 ClientSecret = os.getenv('ClientSecret')
 
-def main(page: ft.Page):
 
-    provider = GoogleOAuthProvider(
-        client_id=ClientID,
-        client_secret=ClientSecret,
-        redirect_url="http://localhost:8550/api/oauth/redirect"
-    )
+class GoogleOAuth():
+    def __init__(
+        self,
+        page: Page,
+        contents: Column,
+        * args,
+        **kwargs,
+    ):
+        super().__init__(*args, **kwargs)
+        self.page = page
 
-    auth_result_text = Column()
-
-    def login_google(e):
-        page.login(provider)
-
-    def on_login(e):
-        print(page.auth.user)
-
-        auth_result_text.controls.append(
-            Column([
-                Text(f"name:{page.auth.user['name']}"),
-                Text(f"name:{page.auth.user['email']}"),
-            ])
+        provider = GoogleOAuthProvider(
+            client_id=ClientID,
+            client_secret=ClientSecret,
+            redirect_url="http://localhost:8550/api/oauth/redirect"
         )
-        page.update()
 
-    page.on_login = on_login
+        auth_result_text = Column()
 
-    page.add(
-        Column([
-            Text("Login Google", size=30),
-            ElevatedButton(
-                "Sign Google", bgcolor="blue", color="white", on_click=login_google),
-            auth_result_text
-        ])
-    )
+        def login_google(e):
+            self.page.login(provider)
 
+        def logout_google(e):
+            page.logout()
+            page.go('/')
 
-ft.app(target=main, port=8550, view=ft.WEB_BROWSER)
+        log_inout_button = ElevatedButton()
+        if page.auth is None:
+            log_inout_button = ElevatedButton(
+                "Sign Google", bgcolor="blue", color="white", on_click=login_google)
+        else:
+            log_inout_button = ElevatedButton(
+                "Sign out Google", bgcolor="blue", color="white", on_click=logout_google)
+
+        def on_login(e):
+            print(page.auth.user)
+            contents.controls.remove(log_inout_button)
+            auth_result_text.controls.append(
+                Column([
+                    ElevatedButton(
+                        "Sign out Google", bgcolor="blue", color="white", on_click=logout_google),
+                    Text(f"name:{page.auth.user['name']}"),
+                    Text(f"name:{page.auth.user['email']}"),
+                ])
+            )
+            page.update()
+
+        page.on_login = on_login
+
+        contents.controls.append(ft.Text("Login Google", size=30))
+        contents.controls.append(log_inout_button)
+        contents.controls.append(auth_result_text)
+        # contents.controls.append(
+        #     Column([
+        #         Text("Login Google", size=30),
+        #         log_inout_button,
+        #         auth_result_text
+        #     ]))
+
+# ft.app(target=main, port=8550, view=ft.WEB_BROWSER)
 # reference
 # https://www.youtube.com/watch?v=t9ca2jC4YTo
