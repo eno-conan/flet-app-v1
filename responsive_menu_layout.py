@@ -18,6 +18,7 @@ from layout import ResponsiveMenuLayout
 from time import sleep
 from google_auth import GoogleOAuth
 from text_fields import TextFieldsAndSubmit
+from card_list import ScrollCardList
 
 from flet.auth.providers.google_oauth_provider import GoogleOAuthProvider
 import os
@@ -135,33 +136,7 @@ if __name__ == "__main__":
             # ログイン処理のための画面要素
             GoogleOAuth(page, contents)
             # カード一覧表示
-            lv = ft.ListView(expand=True, spacing=15, auto_scroll=False)
-            for _ in range(15):
-                lv.controls.append(ft.Card(
-                    content=ft.Container(
-                        content=ft.Column(
-                            [
-                                ft.ListTile(
-                                    leading=ft.Icon(ft.icons.ALBUM),
-                                    title=ft.Text("The Enchanted Nightingale"),
-                                    subtitle=ft.Text(
-                                        "Music by Julie Gable. Lyrics by Sidney Stein."
-                                    ),
-                                ),
-                                ft.Row(
-                                    [ft.TextButton("Buy tickets"),
-                                     ft.TextButton("Listen")],
-                                    alignment=ft.MainAxisAlignment.END,
-                                ),
-                            ]
-                        ),
-                        width=400,
-                        padding=10,
-                        margin=10
-                    )
-                ))
-
-            contents.controls.append(lv)
+            ScrollCardList(page, contents)
             return contents
         elif title == "Menu in portrait":
             # ベースとなるコンテンツ

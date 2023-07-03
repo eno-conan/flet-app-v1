@@ -135,6 +135,7 @@ class ResponsiveMenuLayout(Row):
         self.page.update()
 
     def _change_displayed_page(self):
+        # print(self.page.session.get('key'))
         # print(self.page.auth['user'])
         # 以下の実装のような形にしてもいいかもしれない
         #   if troute.match("/"):
@@ -164,7 +165,6 @@ class ResponsiveMenuLayout(Row):
             content_page.visible = page_number == i
 
     def _route_change(self, route):
-        print(route)
         try:
             page_number = self.routes.index(route)
         except ValueError:
@@ -179,7 +179,6 @@ class ResponsiveMenuLayout(Row):
 
     # initで定義するだけ
     def build_navigation_rail(self):
-        # print("build_navigation_rail")
         return NavigationRail(
             selected_index=0,
             label_type="none",

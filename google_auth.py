@@ -68,6 +68,7 @@ class GoogleOAuth():
                     Text(f"name:{page.auth.user['email']}"),
                 ])
             )
+            # page.session.set("key", "value")
             page.update()
 
         page.on_login = on_login
