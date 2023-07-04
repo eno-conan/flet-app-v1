@@ -99,12 +99,6 @@ if __name__ == "__main__":
 
         menu_layout = ResponsiveMenuLayout(page, pages)
 
-        login_button = Container(
-            content=ElevatedButton(
-                "Sign In Google", bgcolor="green", color="white"),
-            margin=ft.margin.only(right=10)
-        )
-
         page.appbar.actions = [
             # Text("Login Google"),
             # Container(
@@ -114,13 +108,13 @@ if __name__ == "__main__":
             # )
         ]
 
-        GoogleOAuth(page, page.appbar.actions)
 
         # Add Button
         # menu_layout.navigation_rail.leading = ElevatedButton(
         #     "Add", icon=icons.ADD, expand=True, on_click=lambda e: print("Add clicked")
         # )
         # page.scroll = "always"
+        GoogleOAuth(page, page.appbar.actions)
         page.add(menu_layout)
 
         menu_button.on_click = lambda e: menu_layout.toggle_navigation()

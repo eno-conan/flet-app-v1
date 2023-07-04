@@ -64,6 +64,8 @@ class ResponsiveMenuLayout(Row):
         )
 
         self.content_area = Column(page_contents, expand=True)
+        # 初期状態（ログイン状態）を保持する
+        self.content_area_clone = self.content_area
         self._was_portrait = self.is_portrait()
         self._panel_visible = self.is_landscape()
 
@@ -135,9 +137,25 @@ class ResponsiveMenuLayout(Row):
         self.page.update()
 
     def _change_displayed_page(self):
-        # print(self.page.session.get('key'))
-        # print(self.page.auth['user'])
-        # 以下の実装のような形にしてもいいかもしれない
+        # クリックしたタブに合わせて表示内容更新
+        page_number = self.navigation_rail.selected_index
+        # ここはタブを変える度に実行できるから、ここでデータ取得する処理を入れ
+        if self._support_routes:
+            # print(self.page.session.get('key'))
+            self.page.route = self.routes[page_number]
+            if page_number == 1:
+                if self.page.auth is None:
+                    self.content_area.controls[1] = Text("Update")
+                else:
+                    self.content_area.controls[1] = self.content_area_clone.controls[1]
+            if page_number == 2:
+                if self.page.auth is None:
+                    self.content_area.controls[-1] = Text("Update")
+                else:
+                    self.content_area.controls[-1] = self.content_area_clone.controls[-1]
+        for i, content_page in enumerate(self.content_area.controls):
+            content_page.visible = page_number == i
+            # 以下の実装のような形にしてもいいかもしれない
         #   if troute.match("/"):
         #     self.page.go("/boards")
         # elif troute.match("/board/:id"):
@@ -150,26 +168,12 @@ class ResponsiveMenuLayout(Row):
         # elif troute.match("/members"):
         #     self.layout.set_members_view()
         # self.page.update()
-        # クリックしたタブに合わせて表示内容更新
-        page_number = self.navigation_rail.selected_index
-        # ここはタブを変える度に実行できるから、ここでデータ取得する処理を入れ
-        if self._support_routes:
-            self.page.route = self.routes[page_number]
-            if (page_number == 1):
-                if self.page.auth is None:
-                    self.content_area.controls[-2] = Text("Update")
-            if (page_number == 2):
-                if self.page.auth is None:
-                    self.content_area.controls[-1] = Text("Update")
-        for i, content_page in enumerate(self.content_area.controls):
-            content_page.visible = page_number == i
 
     def _route_change(self, route):
         try:
             page_number = self.routes.index(route)
         except ValueError:
             page_number = 0
-        # print(page_number)
 
         self.select_page(page_number)
 
