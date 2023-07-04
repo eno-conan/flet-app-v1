@@ -12,38 +12,34 @@ from flet import (
     Row,
     Switch,
     Text,
-    icons
+    icons,
 )
 from layout import ResponsiveMenuLayout
-from time import sleep
 from google_auth import GoogleOAuth
 from text_fields import TextFieldsAndSubmit
 from card_list import ScrollCardList
+from switch_right_dark import ToggleDarkLight
 
 from flet.auth.providers.google_oauth_provider import GoogleOAuthProvider
 import os
 from dotenv import load_dotenv
 load_dotenv()
 
-ClientID = os.getenv('ClientID')
-ClientSecret = os.getenv('ClientSecret')
-
 if __name__ == "__main__":
 
     def main(page: Page, title="Basic Responsive Menu"):
 
         page.title = title
-
-        menu_button = IconButton(icons.MENU)
-
+        page.theme_mode = "light"
+        menu_button = IconButton(icons.MENU, icon_color=ft.colors.WHITE)
         page.appbar = AppBar(
-            title=Text(f"MyApp", size=32),
+            title=Text(f"My Flet Sample App", size=32, color=ft.colors.WHITE),
             leading=menu_button,
             center_title=True,
             leading_width=40,
             # bgcolor=colors.SURFACE_VARIANT,
             toolbar_height=70,
-            bgcolor=ft.colors.LIME_500,
+            bgcolor=ft.colors.BLUE_ACCENT_700
         )
 
         pages = [
@@ -99,21 +95,8 @@ if __name__ == "__main__":
 
         menu_layout = ResponsiveMenuLayout(page, pages)
 
-        page.appbar.actions = [
-            # Text("Login Google"),
-            # Container(
-            #     content=Switch(
-            #         on_change=lambda e: toggle_icons_only(menu_layout)),
-            #     margin=ft.margin.only(right=10)
-            # )
-        ]
-
-
-        # Add Button
-        # menu_layout.navigation_rail.leading = ElevatedButton(
-        #     "Add", icon=icons.ADD, expand=True, on_click=lambda e: print("Add clicked")
-        # )
-        # page.scroll = "always"
+        page.appbar.actions = []
+        ToggleDarkLight(page, page.appbar.actions)
         GoogleOAuth(page, page.appbar.actions)
         page.add(menu_layout)
 
@@ -144,14 +127,17 @@ if __name__ == "__main__":
             )
         return contents
 
-    def toggle_icons_only(menu: ResponsiveMenuLayout):
-        menu.minimize_to_icons = not menu.minimize_to_icons
-        menu.page.update()
-
+    ft.app(target=main, port=8550, view=ft.WEB_BROWSER)
+    # def toggle_icons_only(menu: ResponsiveMenuLayout):
+    #     menu.minimize_to_icons = not menu.minimize_to_icons
+    #     menu.page.update()
     # def toggle_menu_width(menu: ResponsiveMenuLayout):
     #     # Menu\nwidth：クリック時のイベント
     #     # トグルがONの状態のとき、アイコンの横にラベルが表示される
     #     menu.menu_extended = not menu.menu_extended
     #     menu.page.update()
-
-    ft.app(target=main, port=8550, view=ft.WEB_BROWSER)
+    # Add Button
+    # menu_layout.navigation_rail.leading = ElevatedButton(
+    #     "Add", icon=icons.ADD, expand=True, on_click=lambda e: print("Add clicked")
+    # )
+    # page.scroll = "always"

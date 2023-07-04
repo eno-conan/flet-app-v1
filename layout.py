@@ -145,6 +145,7 @@ class ResponsiveMenuLayout(Row):
             if page_number != 0 and self.page.auth is None:
                 self.content_area.controls[page_number] = Text("Update")
             else:
+                # create_page(self.page ,self.pages, self.pages)
                 if page_number == 1:
                     contents = Column(expand=True, auto_scroll=False)
                     TextFieldsAndSubmit(self.page, contents)
