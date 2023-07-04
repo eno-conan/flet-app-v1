@@ -140,22 +140,17 @@ class ResponsiveMenuLayout(Row):
     def _change_displayed_page(self):
         # クリックしたタブに合わせて表示内容更新
         page_number = self.navigation_rail.selected_index
-        # ここはタブを変える度に実行できるから、ここでデータ取得する処理を入れ
         if self._support_routes:
-            # print(self.page.session.get('key'))
             self.page.route = self.routes[page_number]
-            if page_number == 1:
-                if self.page.auth is None:
-                    self.content_area.controls[1] = Text("Update")
-                else:
-                    contents = Column()
+            if page_number != 0 and self.page.auth is None:
+                self.content_area.controls[page_number] = Text("Update")
+            else:
+                if page_number == 1:
+                    contents = Column(expand=True, auto_scroll=False)
                     TextFieldsAndSubmit(self.page, contents)
-                    self.content_area.controls[1] = contents
-            if page_number == 2:
-                if self.page.auth is None:
-                    self.content_area.controls[-1] = Text("Update")
-                else:
-                    self.content_area.controls[-1] = Row(
+                    self.content_area.controls[page_number] = contents
+                if page_number == 2:
+                    self.content_area.controls[page_number] = Row(
                         controls=[
                             Column(
                                 horizontal_alignment="stretch",
@@ -172,7 +167,8 @@ class ResponsiveMenuLayout(Row):
                     )
         for i, content_page in enumerate(self.content_area.controls):
             content_page.visible = page_number == i
-            # 以下の実装のような形にしてもいいかもしれない
+        # print(self.page.session.get('key'))
+        # 以下の実装のような形にしてもいいかもしれない
         #   if troute.match("/"):
         #     self.page.go("/boards")
         # elif troute.match("/board/:id"):
