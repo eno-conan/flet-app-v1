@@ -99,22 +99,22 @@ if __name__ == "__main__":
 
         menu_layout = ResponsiveMenuLayout(page, pages)
 
+        login_button = Container(
+            content=ElevatedButton(
+                "Sign In Google", bgcolor="green", color="white"),
+            margin=ft.margin.only(right=10)
+        )
+
         page.appbar.actions = [
-            Row(
-                [
-                    # Text("Minimize\nto icons"),
-                    # Container(
-                    #     content=Switch(
-                    #         on_change=lambda e: toggle_icons_only(menu_layout)),
-                    #     margin=ft.margin.only(right=10)
-                    # )
-                    # Text("Menu\nwidth"),
-                    # Switch(
-                    #     value=True, on_change=lambda e: toggle_menu_width(menu_layout)
-                    # ),
-                ]
-            )
+            # Text("Login Google"),
+            # Container(
+            #     content=Switch(
+            #         on_change=lambda e: toggle_icons_only(menu_layout)),
+            #     margin=ft.margin.only(right=10)
+            # )
         ]
+
+        GoogleOAuth(page, page.appbar.actions)
 
         # Add Button
         # menu_layout.navigation_rail.leading = ElevatedButton(
@@ -134,7 +134,7 @@ if __name__ == "__main__":
             # page title
             contents.controls.append(ft.Text("一覧画面", size=30, weight="bold"),)
             # ログイン処理のための画面要素
-            GoogleOAuth(page, contents)
+            # GoogleOAuth(page, contents)
             # カード一覧表示
             ScrollCardList(page, contents)
             return contents
@@ -160,9 +160,9 @@ if __name__ == "__main__":
                 # wrap=True, scroll="always", expand=True
             )
 
-    # def toggle_icons_only(menu: ResponsiveMenuLayout):
-    #     menu.minimize_to_icons = not menu.minimize_to_icons
-    #     menu.page.update()
+    def toggle_icons_only(menu: ResponsiveMenuLayout):
+        menu.minimize_to_icons = not menu.minimize_to_icons
+        menu.page.update()
 
     # def toggle_menu_width(menu: ResponsiveMenuLayout):
     #     # Menu\nwidth：クリック時のイベント

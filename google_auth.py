@@ -27,7 +27,7 @@ class GoogleOAuth():
     def __init__(
         self,
         page: Page,
-        contents: Column,
+        contents: list,
         * args,
         **kwargs,
     ):
@@ -49,17 +49,19 @@ class GoogleOAuth():
             page.logout()
             page.go('/')
 
-        log_inout_button = ElevatedButton()
         if page.auth is None:
-            log_inout_button = ElevatedButton(
-                "Sign Google", bgcolor="blue", color="white", on_click=login_google)
+            log_inout_button = Container(
+                content=ElevatedButton(
+                    "Sign in Google", bgcolor="green", color="white", on_click=login_google),
+                margin=ft.margin.only(right=10)
+            )
         else:
             log_inout_button = ElevatedButton(
-                "Sign out Google", bgcolor="blue", color="white", on_click=logout_google)
+                "Sign out Google", bgcolor="", color="white", on_click=logout_google)
 
         def on_login(e):
             print(page.auth.user)
-            contents.controls.remove(log_inout_button)
+            # contents.controls.remove(log_inout_button)
             auth_result_text.controls.append(
                 Column([
                     ElevatedButton(
@@ -73,9 +75,10 @@ class GoogleOAuth():
 
         page.on_login = on_login
 
-        contents.controls.append(ft.Text("Login Google", size=30))
-        contents.controls.append(log_inout_button)
-        contents.controls.append(auth_result_text)
+        # contents.controls.append(ft.Text("Login Google", size=30))
+        # contents.controls.append(log_inout_button)
+        contents.append(log_inout_button)
+        # contents.controls.append(auth_result_text)
         # contents.controls.append(
         #     Column([
         #         Text("Login Google", size=30),
