@@ -121,24 +121,14 @@ if __name__ == "__main__":
 
     # main_contentsのレイアウトをこれで統一
     def create_page(page: Page, title: str, body: str):
-        # ページによって表示内容を更新できるようにする
+        # ここの分岐とPathのところの分岐を上手く共通化できそう。
+        contents = Column(expand=True, auto_scroll=False)
         if title == "Menu in landscape":
-            # ベースとなるコンテンツ
-            contents = Column(expand=True, auto_scroll=False)
-            # page title
-            contents.controls.append(ft.Text("一覧画面", size=30, weight="bold"),)
-            # ログイン処理のための画面要素
-            # GoogleOAuth(page, contents)
-            # カード一覧表示
             ScrollCardList(page, contents)
-            return contents
         elif title == "Menu in portrait":
-            # ベースとなるコンテンツ
-            contents = Column()
             TextFieldsAndSubmit(page, contents)
-            return contents
         else:
-            return Row(
+            contents = Row(
                 controls=[
                     Column(
                         horizontal_alignment="stretch",
@@ -151,8 +141,8 @@ if __name__ == "__main__":
                     ),
                 ],
                 expand=True
-                # wrap=True, scroll="always", expand=True
             )
+        return contents
 
     def toggle_icons_only(menu: ResponsiveMenuLayout):
         menu.minimize_to_icons = not menu.minimize_to_icons

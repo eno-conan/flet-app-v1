@@ -13,6 +13,7 @@ from flet import (
     icons
 )
 
+
 class ScrollCardList():
     def __init__(
         self,
@@ -23,6 +24,8 @@ class ScrollCardList():
     ):
         super().__init__(*args, **kwargs)
         self.page = page
+        # page title
+        contents.controls.append(ft.Text("一覧画面", size=30, weight="bold"))
         lv = ft.ListView(expand=True, spacing=15, auto_scroll=False)
         for _ in range(15):
             lv.controls.append(ft.Card(

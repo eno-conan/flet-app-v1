@@ -20,6 +20,7 @@ from flet import (
     icons
 )
 from flet.utils import slugify
+from text_fields import TextFieldsAndSubmit
 
 
 class ResponsiveMenuLayout(Row):
@@ -147,12 +148,28 @@ class ResponsiveMenuLayout(Row):
                 if self.page.auth is None:
                     self.content_area.controls[1] = Text("Update")
                 else:
-                    self.content_area.controls[1] = self.content_area_clone.controls[1]
+                    contents = Column()
+                    TextFieldsAndSubmit(self.page, contents)
+                    self.content_area.controls[1] = contents
             if page_number == 2:
                 if self.page.auth is None:
                     self.content_area.controls[-1] = Text("Update")
                 else:
-                    self.content_area.controls[-1] = self.content_area_clone.controls[-1]
+                    self.content_area.controls[-1] = Row(
+                        controls=[
+                            Column(
+                                horizontal_alignment="stretch",
+                                controls=[
+                                    Card(content=Container(
+                                        Text("title", weight="bold"), padding=8)),
+                                    Text("Body"),
+                                ],
+                                expand=True,
+                            ),
+                        ],
+                        expand=True
+                        # wrap=True, scroll="always", expand=True
+                    )
         for i, content_page in enumerate(self.content_area.controls):
             content_page.visible = page_number == i
             # 以下の実装のような形にしてもいいかもしれない
