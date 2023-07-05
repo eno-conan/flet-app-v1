@@ -16,9 +16,10 @@ from flet import (
 )
 from layout import ResponsiveMenuLayout
 from google_auth import GoogleOAuth
+from switch_right_dark import ToggleDarkLight
 from text_fields import TextFieldsAndSubmit
 from card_list import ScrollCardList
-from switch_right_dark import ToggleDarkLight
+from setting_contents import SettingContents
 
 from flet.auth.providers.google_oauth_provider import GoogleOAuthProvider
 import os
@@ -37,7 +38,6 @@ if __name__ == "__main__":
             leading=menu_button,
             center_title=True,
             leading_width=40,
-            # bgcolor=colors.SURFACE_VARIANT,
             toolbar_height=70,
             bgcolor=ft.colors.BLUE_ACCENT_700
         )
@@ -94,13 +94,13 @@ if __name__ == "__main__":
         ]
 
         menu_layout = ResponsiveMenuLayout(page, pages)
+        page.add(menu_layout)
+        menu_button.on_click = lambda e: menu_layout.toggle_navigation()
 
         page.appbar.actions = []
         ToggleDarkLight(page, page.appbar.actions)
         GoogleOAuth(page, page.appbar.actions)
-        page.add(menu_layout)
 
-        menu_button.on_click = lambda e: menu_layout.toggle_navigation()
 
     # main_contentsのレイアウトをこれで統一
     def create_page(page: Page, title: str, body: str):
@@ -111,20 +111,7 @@ if __name__ == "__main__":
         elif title == "Menu in portrait":
             TextFieldsAndSubmit(page, contents)
         else:
-            contents = Row(
-                controls=[
-                    Column(
-                        horizontal_alignment="stretch",
-                        controls=[
-                            Card(content=Container(
-                                Text(title, weight="bold"), padding=8)),
-                            Text(body),
-                        ],
-                        expand=True,
-                    ),
-                ],
-                expand=True
-            )
+           SettingContents(page,contents)
         return contents
 
     ft.app(target=main, port=8550, view=ft.WEB_BROWSER)

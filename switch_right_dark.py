@@ -28,7 +28,7 @@ class ToggleDarkLight():
         page.splash = ProgressBar(visible=False)
 
         def change_theme(e):
-            page.splash.visible = True
+            # page.splash.visible = True
             page.theme_mode = "light" if page.theme_mode == "dark" else "dark"
             page.update()
 
@@ -37,7 +37,7 @@ class ToggleDarkLight():
 
             # CHANGE THE ICON DARK MODE OR LIGHT MODE
             toggle_dark_light.selected = not toggle_dark_light.selected
-            toggle_dark_light.tooltip = f"switch right and dark mode (currently {'dark' if toggle_dark_light.selected else 'light'} mode)"
+            toggle_dark_light.tooltip = f"switch light and dark mode (currently {'dark' if toggle_dark_light.selected else 'light'} mode)"
             # if toggle_dark_light.selected:
             #     page.appbar.title = Text(
             #         f"MyApp", size=32, color=ft.colors.BLACK45)

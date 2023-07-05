@@ -1,16 +1,8 @@
 import flet as ft
 from flet import (
-    AppBar,
-    Card,
-    Column,
     Container,
     ElevatedButton,
-    IconButton,
     Page,
-    Row,
-    Switch,
-    Text,
-    icons
 )
 from flet.auth.providers.google_oauth_provider import GoogleOAuthProvider
 import os
@@ -29,17 +21,21 @@ class GoogleOAuth():
         **kwargs,
     ):
         super().__init__(*args, **kwargs)
+
         self.page = page
 
+        # GoogleOAuthのProvider定義
         provider = GoogleOAuthProvider(
             client_id=ClientID,
             client_secret=ClientSecret,
             redirect_url="http://localhost:8550/api/oauth/redirect"
         )
 
+        # ログイン処理
         def login_google(e):
             self.page.login(provider)
 
+        # ログアウト処理
         def logout_google(e):
             page.logout()
             contents.pop()
@@ -63,20 +59,18 @@ class GoogleOAuth():
             margin=ft.margin.only(right=10)
         )
 
-        if page.auth is None:
-            log_inout_button = login_button
-
         def on_login(e):
             print(page.auth.user['name'], page.auth.user['email'])
             contents.pop()
+            # 画面に表示するボタンを「ログアウト」ボタンに
             log_inout_button = logout_button
             contents.append(log_inout_button)
-            # page.session.set("key", "value")
             page.update()
             page.go('/')
 
         page.on_login = on_login
-
+        # 画面に表示するボタンを「ログイン」ボタンに
+        log_inout_button = login_button
         contents.append(log_inout_button)
 
 # reference

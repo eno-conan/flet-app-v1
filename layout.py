@@ -21,6 +21,7 @@ from flet import (
 )
 from flet.utils import slugify
 from text_fields import TextFieldsAndSubmit
+from setting_contents import SettingContents
 
 
 class ResponsiveMenuLayout(Row):
@@ -65,8 +66,6 @@ class ResponsiveMenuLayout(Row):
         )
 
         self.content_area = Column(page_contents, expand=True)
-        # 初期状態（ログイン状態）を保持する
-        self.content_area_clone = self.content_area
         self._was_portrait = self.is_portrait()
         self._panel_visible = self.is_landscape()
 
@@ -143,29 +142,16 @@ class ResponsiveMenuLayout(Row):
         if self._support_routes:
             self.page.route = self.routes[page_number]
             if page_number != 0 and self.page.auth is None:
-                self.content_area.controls[page_number] = Text("Update")
+                self.content_area.controls[page_number] = Text(
+                    "Googleアカウントでログインしてください", size=30)
             else:
-                # create_page(self.page ,self.pages, self.pages)
+                contents = Column(expand=True, auto_scroll=False)
                 if page_number == 1:
-                    contents = Column(expand=True, auto_scroll=False)
                     TextFieldsAndSubmit(self.page, contents)
                     self.content_area.controls[page_number] = contents
                 if page_number == 2:
-                    self.content_area.controls[page_number] = Row(
-                        controls=[
-                            Column(
-                                horizontal_alignment="stretch",
-                                controls=[
-                                    Card(content=Container(
-                                        Text("title", weight="bold"), padding=8)),
-                                    Text("Body"),
-                                ],
-                                expand=True,
-                            ),
-                        ],
-                        expand=True
-                        # wrap=True, scroll="always", expand=True
-                    )
+                    SettingContents(self.page,contents)
+                    self.content_area.controls[page_number] = contents
         for i, content_page in enumerate(self.content_area.controls):
             content_page.visible = page_number == i
         # print(self.page.session.get('key'))
