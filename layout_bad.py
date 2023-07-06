@@ -2,16 +2,26 @@ from copy import deepcopy
 
 import flet as ft
 from flet import (
+    AppBar,
+    Card,
     Column,
     Container,
+    ElevatedButton,
+    IconButton,
     NavigationRail,
     NavigationRailDestination,
     Page,
     Row,
     Stack,
+    Switch,
+    Text,
     VerticalDivider,
+    colors,
+    icons
 )
 from flet.utils import slugify
+from text_fields import TextFieldsAndSubmit
+from setting_contents import SettingContents
 
 
 class ResponsiveMenuLayout(Row):
@@ -37,8 +47,10 @@ class ResponsiveMenuLayout(Row):
         self._portrait_minimize_to_icons = portrait_minimize_to_icons
         self._support_routes = support_routes
         self.expand = True
+        # ナビゲーション表示内容の設定
         self.navigation_items = [
             navigation_item for navigation_item, _ in pages]
+        # 各ナビゲーションのパス設定
         # slugify：'Menu in landscape' to 'menu-in-landscape'
         self.routes = [
             f"/{item.pop('route', None) or slugify(item['label'])}"
@@ -49,6 +61,7 @@ class ResponsiveMenuLayout(Row):
         self._menu_extended = menu_extended
         self.navigation_rail.extended = menu_extended
         page_contents = [page_content for _, page_content in pages]
+        # navigation_itemsの表示エリア全体
         self.menu_panel = Row(
             controls=[self.navigation_rail, VerticalDivider(width=1)],
             spacing=0,
@@ -62,9 +75,9 @@ class ResponsiveMenuLayout(Row):
         self.set_navigation_content()
 
         # supports_routes：多分ルーティングの検知をサポートするか、ってために用意した変数かと。
-        if support_routes:
-            self._route_change(page.route)
-            self.page.on_route_change = self._on_route_change
+        # if support_routes:
+        self._route_change(page.route)
+        self.page.on_route_change = self._on_route_change
         self._change_displayed_page()
 
         self.page.on_resize = self.handle_resize
@@ -127,12 +140,15 @@ class ResponsiveMenuLayout(Row):
         self.page.update()
 
     def _change_displayed_page(self):
+        print(self.navigation_rail.selected_index)
+        # クリックしたタブに合わせて表示内容更新
         page_number = self.navigation_rail.selected_index
-        self.page.route = self.routes[page_number]
-        # ここはタブを変える度に実行できるから、ここでデータ取得する処理を入れ
+        # if self._support_routes:
         self.update_destinations()
         for i, content_page in enumerate(self.content_area.controls):
             content_page.visible = page_number == i
+        # 以下の実装のような形にしてもいいかもしれない
+        # print(self.page.session.get('key'))
         #   if troute.match("/"):
         #     self.page.go("/boards")
         # elif troute.match("/board/:id"):
@@ -144,13 +160,9 @@ class ResponsiveMenuLayout(Row):
         #     self.layout.set_all_boards_view()
         # elif troute.match("/members"):
         #     self.layout.set_members_view()
-        # self.page.update()
-        # クリックしたタブに合わせて表示内容更新
+        self.page.update()
 
     def _route_change(self, route):
-        # ログアウトしたときはトップページ表示
-        if route == '/logout':
-            route = '/'
         try:
             page_number = self.routes.index(route)
         except ValueError:
@@ -159,14 +171,11 @@ class ResponsiveMenuLayout(Row):
         self.select_page(page_number)
 
     def _on_route_change(self, event):
-        print("_on_route_change")
-        # タブの表示項目を更新
-        self.update_destinations()
         self._route_change(event.route)
         self.page.update()
 
+    # initで定義するだけ
     def build_navigation_rail(self):
-        # initで定義するだけ
         return NavigationRail(
             selected_index=0,
             label_type="none",
@@ -174,12 +183,15 @@ class ResponsiveMenuLayout(Row):
         )
 
     def update_destinations(self, icons_only=False):
+        # print("update_destinations")
+        # Minimize to iconsのトグルクリック時のイベント
         navigation_items = self.navigation_items
-        if icons_only:
-            navigation_items = deepcopy(navigation_items)
-            for item in navigation_items:
-                item.pop("label")
+        # if icons_only:
+        #     navigation_items = deepcopy(navigation_items)
+        #     for item in navigation_items:
+        #         item.pop("label")
 
+        # 未認証状態であれば、一つ目のアイコンだけ表示
         if self.page.auth is None:
             _navigation_items = []
             _navigation_items.append(navigation_items[0])
@@ -189,6 +201,7 @@ class ResponsiveMenuLayout(Row):
         self.navigation_rail.destinations = [
             NavigationRailDestination(**nav_specs) for nav_specs in navigation_items
         ]
+        # self.navigation_rail.label_type = "none" if icons_only else "all"
 
     def handle_resize(self, e):
         if self._was_portrait != self.is_portrait():
@@ -203,7 +216,7 @@ class ResponsiveMenuLayout(Row):
         self.set_navigation_content()
         self.page.update()
 
-    # トグル選択時のアクション
+    # # トグル選択時のアクション
     def check_toggle_on_select(self):
         # self._panel_visible：アイコン下の文字が見えるときTrue
         if self.is_portrait() and self._panel_visible:

@@ -68,7 +68,7 @@ class GoogleOAuth():
             log_inout_button = login_button
             contents.append(log_inout_button)
             page.update()
-            page.go('/')
+            page.go('/logout')
 
         page.on_login = on_login
         page.on_logout = on_logout
