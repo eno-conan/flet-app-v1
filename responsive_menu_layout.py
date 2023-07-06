@@ -45,21 +45,8 @@ if __name__ == "__main__":
         pages = [
             (
                 dict(
-                    icon=icons.LANDSCAPE_OUTLINED,
-                    selected_icon=icons.LANDSCAPE,
-                    label="Menu in landscape",
-                ),
-                create_page(
-                    page,
-                    "Menu in landscape",
-                    "Menu in landscape is by default shown, side by side with the main content, but can be "
-                    "hidden with the menu button.",
-                ),
-            ),
-            (
-                dict(
-                    icon=icons.LANDSCAPE_OUTLINED,
-                    selected_icon=icons.LANDSCAPE,
+                    icon=ft.icons.HOUSE_OUTLINED,
+                    selected_icon=ft.icons.HOUSE,
                     label="Top",
                 ),
                 create_page(
@@ -71,13 +58,26 @@ if __name__ == "__main__":
             ),
             (
                 dict(
-                    icon=icons.PORTRAIT_OUTLINED,
-                    selected_icon=icons.PORTRAIT,
-                    label="Menu in portrait",
+                    icon=ft.icons.FEATURED_PLAY_LIST_OUTLINED,
+                    selected_icon=ft.icons.FEATURED_PLAY_LIST_ROUNDED,
+                    label="Card List",
                 ),
                 create_page(
                     page,
-                    "Menu in portrait",
+                    "Card List",
+                    "Menu in landscape is by default shown, side by side with the main content, but can be "
+                    "hidden with the menu button.",
+                ),
+            ),
+            (
+                dict(
+                    icon=ft.icons.ADD_BOX_OUTLINED,
+                    selected_icon=ft.icons.ADD_BOX,
+                    label="Add Form",
+                ),
+                create_page(
+                    page,
+                    "Add Form",
                     "Menu in portrait is mainly expected to be used on a smaller mobile device."
                     "\n\n"
                     "The menu is by default hidden, and when shown with the menu button it is placed on top of the main "
@@ -88,8 +88,8 @@ if __name__ == "__main__":
             ),
             (
                 dict(
-                    icon=ft.icons.SETTINGS,
-                    selected_icon=icons.INSERT_EMOTICON,
+                    icon=ft.icons.SETTINGS_OUTLINED,
+                    selected_icon=ft.icons.SETTINGS,
                     label="Setting Your Account",
                 ),
                 create_page(
@@ -120,9 +120,11 @@ if __name__ == "__main__":
     def create_page(page: Page, title: str, body: str):
         # ここの分岐とPathのところの分岐を上手く共通化できそう。
         contents = Column(expand=True, auto_scroll=False)
-        if title == "Menu in landscape":
+        if title == "Top":
+            contents.controls.append(Text("Top画面", size=32))
+        elif title == "Card List":
             ScrollCardList(page, contents)
-        elif title == "Menu in portrait":
+        elif title == "Add Form":
             TextFieldsAndSubmit(page, contents)
         else:
             SettingContents(page, contents)
