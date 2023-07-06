@@ -39,13 +39,6 @@ class GoogleOAuth():
         def logout_google(e):
             self.page.logout()
 
-        def on_logout(e):
-            contents.pop()
-            log_inout_button = login_button
-            contents.append(log_inout_button)
-            page.update()
-            page.go('/')
-
         # ログインボタン
         login_button = Container(
             content=ElevatedButton(
@@ -66,6 +59,13 @@ class GoogleOAuth():
             contents.pop()
             # 画面に表示するボタンを「ログアウト」ボタンに
             log_inout_button = logout_button
+            contents.append(log_inout_button)
+            page.update()
+            page.go('/')
+
+        def on_logout(e):
+            contents.pop()
+            log_inout_button = login_button
             contents.append(log_inout_button)
             page.update()
             page.go('/')

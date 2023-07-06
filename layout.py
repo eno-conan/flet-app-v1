@@ -143,10 +143,10 @@ class ResponsiveMenuLayout(Row):
         print(self.navigation_rail.selected_index)
         # クリックしたタブに合わせて表示内容更新
         page_number = self.navigation_rail.selected_index
-        if self._support_routes:
-            self.update_destinations()
-            for i, content_page in enumerate(self.content_area.controls):
-                content_page.visible = page_number == i
+        # if self._support_routes:
+        self.update_destinations()
+        for i, content_page in enumerate(self.content_area.controls):
+            content_page.visible = page_number == i
         # 以下の実装のような形にしてもいいかもしれない
         # print(self.page.session.get('key'))
         #   if troute.match("/"):
