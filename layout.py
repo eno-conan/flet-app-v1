@@ -159,7 +159,7 @@ class ResponsiveMenuLayout(Row):
         self.select_page(page_number)
 
     def _on_route_change(self, event):
-        print("_on_route_change")
+        # print("_on_route_change")
         # タブの表示項目を更新
         self.update_destinations()
         self._route_change(event.route)

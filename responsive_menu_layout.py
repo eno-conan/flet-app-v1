@@ -105,6 +105,13 @@ if __name__ == "__main__":
         contents = Column(expand=True, auto_scroll=False)
         if title == "Top":
             contents.controls.append(Text("Top画面", size=32))
+            img = ft.Image(
+                src=f"icons/flet.png",
+                width=100,
+                height=100,
+                fit=ft.ImageFit.CONTAIN,
+            )
+            contents.controls.append(img)
         elif title == "Card List":
             ScrollCardList(page, contents)
         elif title == "Add Form":
@@ -113,7 +120,7 @@ if __name__ == "__main__":
             SettingContents(page, contents)
         return contents
 
-    ft.app(target=main, port=8550, view=ft.WEB_BROWSER)
+    ft.app(target=main, port=8550, assets_dir="assets", view=ft.WEB_BROWSER)
     # def toggle_icons_only(menu: ResponsiveMenuLayout):
     #     menu.minimize_to_icons = not menu.minimize_to_icons
     #     menu.page.update()

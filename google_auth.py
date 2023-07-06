@@ -11,6 +11,7 @@ load_dotenv()
 
 ClientID = os.getenv('ClientID')
 ClientSecret = os.getenv('ClientSecret')
+RedirectUrl= os.getenv('RedirectUrl')
 
 class GoogleOAuth():
     def __init__(
@@ -28,7 +29,7 @@ class GoogleOAuth():
         provider = GoogleOAuthProvider(
             client_id=ClientID,
             client_secret=ClientSecret,
-            redirect_url="http://localhost:8550/api/oauth/redirect"
+            redirect_url=RedirectUrl
         )
 
         # ログイン処理
@@ -55,7 +56,7 @@ class GoogleOAuth():
         )
 
         def on_login(e):
-            print(page.auth.user['name'], page.auth.user['email'])
+            # print(page.auth.user['name'], page.auth.user['email'])
             contents.pop()
             # 画面に表示するボタンを「ログアウト」ボタンに
             log_inout_button = logout_button
