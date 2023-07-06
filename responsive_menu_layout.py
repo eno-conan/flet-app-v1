@@ -58,6 +58,19 @@ if __name__ == "__main__":
             ),
             (
                 dict(
+                    icon=icons.LANDSCAPE_OUTLINED,
+                    selected_icon=icons.LANDSCAPE,
+                    label="Top",
+                ),
+                create_page(
+                    page,
+                    "Top",
+                    "Menu in landscape is by default shown, side by side with the main content, but can be "
+                    "hidden with the menu button.",
+                ),
+            ),
+            (
+                dict(
                     icon=icons.PORTRAIT_OUTLINED,
                     selected_icon=icons.PORTRAIT,
                     label="Menu in portrait",
@@ -100,9 +113,10 @@ if __name__ == "__main__":
         page.appbar.actions = []
         ToggleDarkLight(page, page.appbar.actions)
         GoogleOAuth(page, page.appbar.actions)
-
+        page.update()
 
     # main_contentsのレイアウトをこれで統一
+
     def create_page(page: Page, title: str, body: str):
         # ここの分岐とPathのところの分岐を上手く共通化できそう。
         contents = Column(expand=True, auto_scroll=False)
@@ -111,7 +125,7 @@ if __name__ == "__main__":
         elif title == "Menu in portrait":
             TextFieldsAndSubmit(page, contents)
         else:
-           SettingContents(page,contents)
+            SettingContents(page, contents)
         return contents
 
     ft.app(target=main, port=8550, view=ft.WEB_BROWSER)
