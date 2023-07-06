@@ -78,10 +78,18 @@ class TextFieldsAndSubmit():
             label="Company Name", on_change=textfield_change)
         contract_name_textfield = ft.TextField(
             label="Contract Name", on_change=textfield_change)
-        # まとめ方が悪いのかもしれないけど、以下でまとめると、テキストフィールドに値を入力してもSubmitボタンが活性状態にならない
+            
         contents.controls.append(
-            Column([
-                company_name_textfield,
-                contract_name_textfield,
-                submit_button
-            ]))
+            Column(
+                [
+                    Container(content=company_name_textfield,
+                              margin=ft.margin.symmetric(horizontal=20)),
+                    Container(content=contract_name_textfield,
+                              margin=ft.margin.symmetric(horizontal=20)
+                              ),
+                    Container(content=submit_button,
+                              margin=ft.margin.only(right=25),
+                              alignment=ft.alignment.center_right),
+                ]
+            )
+        )

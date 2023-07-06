@@ -52,8 +52,6 @@ if __name__ == "__main__":
                 create_page(
                     page,
                     "Top",
-                    "Menu in landscape is by default shown, side by side with the main content, but can be "
-                    "hidden with the menu button.",
                 ),
             ),
             (
@@ -65,8 +63,6 @@ if __name__ == "__main__":
                 create_page(
                     page,
                     "Card List",
-                    "Menu in landscape is by default shown, side by side with the main content, but can be "
-                    "hidden with the menu button.",
                 ),
             ),
             (
@@ -78,12 +74,6 @@ if __name__ == "__main__":
                 create_page(
                     page,
                     "Add Form",
-                    "Menu in portrait is mainly expected to be used on a smaller mobile device."
-                    "\n\n"
-                    "The menu is by default hidden, and when shown with the menu button it is placed on top of the main "
-                    "content."
-                    "\n\n"
-                    "In addition to the menu button, menu can be dismissed by a tap/click on the main content area.",
                 ),
             ),
             (
@@ -95,13 +85,6 @@ if __name__ == "__main__":
                 create_page(
                     page,
                     "Minimize to icons",
-                    "ResponsiveMenuLayout has a parameter minimize_to_icons. "
-                    "Set it to True and the menu is shown as icons only, when normally it would be hidden.\n"
-                    "\n\n"
-                    "Try this with the 'Minimize to icons' toggle in the top bar."
-                    "\n\n"
-                    "There are also landscape_minimize_to_icons and portrait_minimize_to_icons properties that you can "
-                    "use to set this property differently in each orientation.",
                 ),
             ),
         ]
@@ -117,7 +100,7 @@ if __name__ == "__main__":
 
     # main_contentsのレイアウトをこれで統一
 
-    def create_page(page: Page, title: str, body: str):
+    def create_page(page: Page, title: str):
         # ここの分岐とPathのところの分岐を上手く共通化できそう。
         contents = Column(expand=True, auto_scroll=False)
         if title == "Top":
