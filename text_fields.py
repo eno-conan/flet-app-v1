@@ -12,6 +12,7 @@ from flet import (
     Text,
     icons
 )
+import re
 
 
 class TextFieldsAndSubmit():
@@ -42,11 +43,10 @@ class TextFieldsAndSubmit():
                 # clear input values
                 company_name_textfield.value = ""
                 contract_name_textfield.value = ""
+                # category_text.value
                 date_textfield.value = ""
                 page.banner.open = True
-                page.snack_bar.open = True
-                # if field is Empty print None
-                print(category_text.value)
+                # page.snack_bar.open = True
 
                 submit_button.disabled = True
                 # msg_failed_add_customer.visible = False
@@ -60,10 +60,16 @@ class TextFieldsAndSubmit():
                 # page.update()
 
         def textfield_change(e):
-            if company_name_textfield.value == "" or contract_name_textfield.value == "" or date_textfield.value == "":
+            if company_name_textfield.value == "" or contract_name_textfield.value == "":
+                submit_button.disabled = True
+            elif len(date_textfield.value) != 10:
                 submit_button.disabled = True
             else:
-                submit_button.disabled = False
+                date_pattern = "^20[0-9]{2}/(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01])$"
+                res = re.match(date_pattern, date_textfield.value)
+                if res is not None:
+                    print(date_textfield.value)
+                    submit_button.disabled = False
             page.update()
 
         # text fields
@@ -76,7 +82,7 @@ class TextFieldsAndSubmit():
             category_text.value = dd.value
             page.update()
 
-        # DropDown(カテゴリ)    
+        # DropDown(カテゴリ)
         category_text = ft.Text()
         dd = ft.Dropdown(
             on_change=dropdown_changed,
@@ -93,20 +99,19 @@ class TextFieldsAndSubmit():
 
         date_textfield = ft.TextField(
             width=300,
-            label="yyyy/mm/dd",
+            label="Please Input yyyy/mm/dd",
             on_change=textfield_change)
 
         # Notify=================================
-
         # https://flet.dev/docs/controls/banner
         # https://flet.dev/docs/controls/snackbar
-        page.snack_bar = ft.SnackBar(
-            content=ft.Text("Create New Seminar!!",),
-            action_color=ft.colors.LIME_300,
-            bgcolor=ft.colors.BLUE_700,
-            action="Alright!",
-            duration=5000
-        )
+        # page.snack_bar = ft.SnackBar(
+        #     content=ft.Text("Create New Seminar!!",),
+        #     action_color=ft.colors.LIME_300,
+        #     bgcolor=ft.colors.BLUE_700,
+        #     action="Alright!",
+        #     duration=5000
+        # )
 
         def close_banner(e):
             page.banner.open = False
