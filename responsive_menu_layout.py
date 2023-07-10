@@ -19,6 +19,7 @@ from google_auth import GoogleOAuth
 from switch_right_dark import ToggleDarkLight
 from add_form import TextFieldsAndSubmit
 from card_list import ScrollCardList
+from card_list_infinite import ScrollCardListInfinite
 from setting_contents import SettingContents
 
 from flet.auth.providers.google_oauth_provider import GoogleOAuthProvider
@@ -113,7 +114,8 @@ if __name__ == "__main__":
             )
             contents.controls.append(img)
         elif title == "Card List":
-            ScrollCardList(page, contents)
+            # ScrollCardList(page, contents)
+            ScrollCardListInfinite(page, contents)
         elif title == "Add Form":
             TextFieldsAndSubmit(page, contents)
         else:

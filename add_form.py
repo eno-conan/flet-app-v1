@@ -54,7 +54,7 @@ class TextFieldsAndSubmit():
                 # page.update()
 
         # 不正日付のメッセージ表示
-        msg_invalid_date_text = ft.Text()
+        # msg_invalid_date_text = ft.Text()
         msg_invalid_date = Row(
             [
                 ft.Text("日付の形式がyyyy/mm/ddではない、または存在しない日付です。",

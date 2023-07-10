@@ -11,58 +11,87 @@ s = State()
 sem = threading.Semaphore()  # What is This???
 
 
-def main(page: Page):
+class ScrollCardListInfinite():
+    def __init__(
+        self,
+        page: Page,
+        contents: Column,
+        * args,
+        **kwargs,
+    ):
+        super().__init__(*args, **kwargs)
+        self.page = page
 
-    def my_scroll(e: OnScrollEvent):
-        print(f'e.pixels:{e.pixels}')
-        print(f'e.max_scroll_extent:{e.max_scroll_extent}')
-        # e.max_scroll_extent:MAXでスクロールできるピクセル数
-        if e.pixels >= e.max_scroll_extent - 100:
-            # さらにスクロールされたら、追加で10個表示する感じみたい
-            if sem.acquire(blocking=False):
-                try:
-                    for _ in range(1, 10):
-                        body.controls.append(
-                            Container(
-                                bgcolor="white",
-                                border_radius=30,
-                                margin=ft.margin.only(left=30, right=30),
-                                padding=10,
-                                content=Text(f'you data is {s.i}', size=20)
+        def my_scroll(e: OnScrollEvent):
+            # print(f'e.pixels:{e.pixels}')
+            # print(f'e.max_scroll_extent:{e.max_scroll_extent}')
+            # e.max_scroll_extent:MAXでスクロールできるピクセル数
+            if e.pixels >= e.max_scroll_extent - 100:
+                # さらにスクロールされたら、追加で10個表示する感じみたい
+                if sem.acquire(blocking=False):
+                    try:
+                        for _ in range(1, 10):
+                            lv.controls.append(
+                                ft.Card(
+                                    content=Container(
+                                        content=ft.Column(
+                                            [
+                                                ft.ListTile(
+                                                    leading=ft.Icon(
+                                                        ft.icons.ALBUM),
+                                                    title=ft.Text(
+                                                        "The Enchanted Nightingale"),
+                                                    subtitle=ft.Text(
+                                                        "Music by Julie Gable. Lyrics by Sidney Stein."
+                                                    ),
+                                                ),
+                                                ft.Row(
+                                                    [ft.TextButton("Buy tickets"),
+                                                     ft.TextButton("Listen")],
+                                                    alignment=ft.MainAxisAlignment.END,
+                                                ),
+                                            ]
+                                        ),
+                                        width=400,
+                                        padding=10,
+                                        margin=10
+                                    )
+                                )
                             )
-                        )
-                        s.i += 1
-                        body.update()
-                finally:
-                    sem.release()
+                            s.i += 1
+                            lv.update()
+                    finally:
+                        sem.release()
 
-    body = Column(
-        width=page.window_width,
-        height=500,
-        scroll="always",
-        on_scroll_interval=0,  # ??
-        on_scroll=my_scroll
+        lv = ft.ListView(expand=True, spacing=15, auto_scroll=False)
 
-    )
+        for _ in range(15):
+            lv.controls.append(ft.Card(
+                content=ft.Container(
+                    content=ft.Column(
+                        [
+                            ft.ListTile(
+                                leading=ft.Icon(ft.icons.ALBUM),
+                                title=ft.Text("The Enchanted Nightingale"),
+                                subtitle=ft.Text(
+                                    "Music by Julie Gable. Lyrics by Sidney Stein."
+                                ),
+                            ),
+                            ft.Row(
+                                [ft.TextButton("Buy tickets"),
+                                    ft.TextButton("Listen")],
+                                alignment=ft.MainAxisAlignment.END,
+                            ),
+                        ]
+                    ),
+                    width=400,
+                    padding=10,
+                    margin=10
+                )
+            ))
 
-    for _ in range(0, 20):
-        body.controls.append(
-            Container(
-                bgcolor="white",
-                border_radius=30,
-                margin=ft.margin.only(left=30, right=30),
-                padding=10,
-                content=Text(f"you data - {s.i}", size=20)
-            )
-        )
+        contents.controls.append(lv)
+        contents.on_scroll = my_scroll
 
-        s.i += 1
-
-    page.add(
-        Column([
-            Text("Infinity scroll", weight="bold", size=30),
-            Container(bgcolor="blue", padding=10, content=body)
-        ])
-    )
-
+# Column > Container > Column > Container
 # https://www.youtube.com/watch?v=Zx4m5-m8Fs4
