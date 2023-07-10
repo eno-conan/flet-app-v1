@@ -27,9 +27,6 @@ class TextFieldsAndSubmit():
         self.page = page
 
         def button_clicked(e):
-            # if (len(company_name_textfield.value) == 0 or len(contract_name_textfield.value) == 0):
-            #     page.update()
-            #     return
             try:
                 # create POST request
                 # url = os.getenv('WORKERS_URL')
@@ -45,15 +42,12 @@ class TextFieldsAndSubmit():
                 contract_name_textfield.value = ""
                 # category_text.value
                 date_textfield.value = ""
+                # close Modal
+                dlg_modal.open = False
                 page.banner.open = True
                 # page.snack_bar.open = True
-
                 submit_button.disabled = True
-                # msg_failed_add_customer.visible = False
-                # msg_success_add_customer.visible = True
                 page.update()
-                # page.go('/')
-                # msg_success_add_customer.visible = False
             except Exception as e:
                 print(e)
                 # msg_failed_add_customer.visible = True
@@ -102,17 +96,6 @@ class TextFieldsAndSubmit():
             label="Please Input yyyy/mm/dd",
             on_change=textfield_change)
 
-        # Notify=================================
-        # https://flet.dev/docs/controls/banner
-        # https://flet.dev/docs/controls/snackbar
-        # page.snack_bar = ft.SnackBar(
-        #     content=ft.Text("Create New Seminar!!",),
-        #     action_color=ft.colors.LIME_300,
-        #     bgcolor=ft.colors.BLUE_700,
-        #     action="Alright!",
-        #     duration=5000
-        # )
-
         def close_banner(e):
             page.banner.open = False
             page.update()
@@ -129,14 +112,49 @@ class TextFieldsAndSubmit():
                 size=18,
             ),
             actions=[
-                ft.TextButton("Retry", on_click=close_banner),
+                ft.TextButton("Close", on_click=close_banner),
             ],
+        )
+
+        # def create_modal_content(e):
+        #     return
+
+        def open_dlg_modal(e):
+            page.dialog = dlg_modal
+            dlg_modal.open = True
+            page.update()
+
+        def close_dlg(e):
+            dlg_modal.open = False
+            page.update()
+
+        dlg_modal = ft.AlertDialog(
+            modal=True,
+            title=ft.Text("Confirm Create Seminar"),
+            # content=ft.Text("Do you really want to delete all those files?"),
+            content=ft.Container(
+                height=150,
+                width=200,
+                content=Column(
+                    [
+                        ft.Text(company_name_textfield.value),
+                        ft.Text(contract_name_textfield.value),
+                        ft.Text(category_text.value),
+                        ft.Text(date_textfield.value),
+                    ]
+                )),
+            actions=[
+                ft.TextButton("Create Seminar!", on_click=button_clicked),
+                ft.TextButton("Fix", on_click=close_dlg),
+            ],
+            actions_alignment=ft.MainAxisAlignment.END,
+            on_dismiss=lambda e: print("Modal dialog dismissed!"),
         )
 
         # Submit
         submit_button = ft.ElevatedButton(
             disabled=True,
-            text="Submit", on_click=button_clicked)
+            text="Submit", on_click=open_dlg_modal)
 
         contents.controls.append(
             Column(
@@ -170,3 +188,14 @@ class TextFieldsAndSubmit():
                 ]
             )
         )
+
+# Notify=================================
+        # https://flet.dev/docs/controls/banner
+        # https://flet.dev/docs/controls/snackbar
+        # page.snack_bar = ft.SnackBar(
+        #     content=ft.Text("Create New Seminar!!",),
+        #     action_color=ft.colors.LIME_300,
+        #     bgcolor=ft.colors.BLUE_700,
+        #     action="Alright!",
+        #     duration=5000
+        # )
