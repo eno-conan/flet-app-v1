@@ -29,8 +29,8 @@ class TextFieldsAndSubmit():
             # if (len(company_name_textfield.value) == 0 or len(contract_name_textfield.value) == 0):
             #     page.update()
             #     return
-            # create POST request
             try:
+                # create POST request
                 # url = os.getenv('WORKERS_URL')
                 # data = {
                 #     'CompanyName': company_name_textfield.value,
@@ -38,23 +38,20 @@ class TextFieldsAndSubmit():
                 # }
                 # data_encode = json.dumps(data)
                 # requests.post(url, data=data_encode)
-                # # clear input values
+
+                # clear input values
                 company_name_textfield.value = ""
                 contract_name_textfield.value = ""
-                # submit_button.disabled = True
+                date_textfield.value = ""
+                page.banner.open = True
+                page.snack_bar.open = True
+                # if field is Empty print None
+                print(category_text.value)
+
+                submit_button.disabled = True
                 # msg_failed_add_customer.visible = False
                 # msg_success_add_customer.visible = True
                 page.update()
-                # トーストの使い方が特殊な印象
-                # Container(content=Toast(
-                #     page,
-                #     icons.PERSON_SHARP,
-                #     "Toast title",
-                #     "Toast description",
-                #     submit_button,
-                #     ft.colors.AMBER_500,
-                #     auto_close=10
-                # ).struct()
                 # page.go('/')
                 # msg_success_add_customer.visible = False
             except Exception as e:
@@ -63,33 +60,108 @@ class TextFieldsAndSubmit():
                 # page.update()
 
         def textfield_change(e):
-            if company_name_textfield.value == "" or contract_name_textfield.value == "":
+            if company_name_textfield.value == "" or contract_name_textfield.value == "" or date_textfield.value == "":
                 submit_button.disabled = True
             else:
                 submit_button.disabled = False
             page.update()
-
-        submit_button = ft.ElevatedButton(
-            disabled=True,
-            text="Submit", on_click=button_clicked)
 
         # text fields
         company_name_textfield = ft.TextField(
             label="Company Name", on_change=textfield_change)
         contract_name_textfield = ft.TextField(
             label="Contract Name", on_change=textfield_change)
-            
+
+        def dropdown_changed(e):
+            category_text.value = dd.value
+            page.update()
+
+        # DropDown(カテゴリ)    
+        category_text = ft.Text()
+        dd = ft.Dropdown(
+            on_change=dropdown_changed,
+            bgcolor=ft.colors.BLUE_200,
+            options=[
+                ft.dropdown.Option("Java"),
+                ft.dropdown.Option("Python"),
+                ft.dropdown.Option("Flutter"),
+                ft.dropdown.Option("React"),
+                ft.dropdown.Option("Javascript"),
+            ],
+            width=300,
+        )
+
+        date_textfield = ft.TextField(
+            width=300,
+            label="yyyy/mm/dd",
+            on_change=textfield_change)
+
+        # Notify=================================
+
+        # https://flet.dev/docs/controls/banner
+        # https://flet.dev/docs/controls/snackbar
+        page.snack_bar = ft.SnackBar(
+            content=ft.Text("Create New Seminar!!",),
+            action_color=ft.colors.LIME_300,
+            bgcolor=ft.colors.BLUE_700,
+            action="Alright!",
+            duration=5000
+        )
+
+        def close_banner(e):
+            page.banner.open = False
+            page.update()
+
+        page.banner = ft.Banner(
+            content_padding=ft.padding.only(
+                left=16.0, top=16.0, right=16.0, bottom=8.0),
+            bgcolor=ft.colors.GREEN_100,
+            leading=ft.Icon(ft.icons.CHECK_CIRCLE_OUTLINE,
+                            color=ft.colors.GREEN_500, size=40),
+            content=ft.Text(
+                "Oops, there were some errors while trying to delete the file. What would you like me to do?",
+                font_family=ft.FontWeight.W_500,
+                size=18,
+            ),
+            actions=[
+                ft.TextButton("Retry", on_click=close_banner),
+            ],
+        )
+
+        # Submit
+        submit_button = ft.ElevatedButton(
+            disabled=True,
+            text="Submit", on_click=button_clicked)
+
         contents.controls.append(
             Column(
                 [
-                    Container(content=company_name_textfield,
-                              margin=ft.margin.symmetric(horizontal=20)),
-                    Container(content=contract_name_textfield,
-                              margin=ft.margin.symmetric(horizontal=20)
+                    Container(content=Text("セミナー追加", size=32),
+                              margin=ft.margin.symmetric(horizontal=20,
+                              vertical=10)),
+                    Container(content=Column(
+                        [company_name_textfield, contract_name_textfield]
+                    ),
+                        margin=ft.margin.symmetric(horizontal=30, vertical=10)
+                    ),
+                    Container(content=Text("ジャンル選択", size=20),
+                              margin=ft.margin.symmetric(horizontal=20,)
+                              ),
+                    Container(content=Column([dd]),
+                              margin=ft.margin.symmetric(
+                                  horizontal=30, vertical=10)
+                              ),
+                    Container(content=Text("開催日", size=20),
+                              margin=ft.margin.symmetric(horizontal=20,)
+                              ),
+                    Container(content=date_textfield,
+                              margin=ft.margin.symmetric(
+                                  horizontal=30, vertical=10)
                               ),
                     Container(content=submit_button,
                               margin=ft.margin.only(right=25),
-                              alignment=ft.alignment.center_right),
+                              alignment=ft.alignment.center_right
+                              ),
                 ]
             )
         )

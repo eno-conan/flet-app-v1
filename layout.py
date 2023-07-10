@@ -184,6 +184,7 @@ class ResponsiveMenuLayout(Row):
             _navigation_items = []
             _navigation_items.append(navigation_items[0])
             _navigation_items.append(navigation_items[1])
+            _navigation_items.append(navigation_items[2])
             navigation_items = _navigation_items
 
         self.navigation_rail.destinations = [
