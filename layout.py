@@ -74,7 +74,7 @@ class ResponsiveMenuLayout(Row):
         self.page.views.pop()
         top_view = self.page.views[-1]
         # Noneの場合は、settingのトップに戻る
-        if top_view.route is None:
+        if self.page.route == '/setting-account':
             self.page.go('/setting-account')
         else:
             self.page.go('/')
