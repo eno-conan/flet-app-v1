@@ -22,7 +22,7 @@ class ScrollCardListInfinite():
         super().__init__(*args, **kwargs)
         self.page = page
 
-        def my_scroll(e: OnScrollEvent):
+        def my_scroll(e: ft.OnScrollEvent):
             # print(f'e.pixels:{e.pixels}')
             # print(f'e.max_scroll_extent:{e.max_scroll_extent}')
             # e.max_scroll_extent:MAXでスクロールできるピクセル数
