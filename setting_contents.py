@@ -20,6 +20,13 @@ class SettingContents():
         super().__init__(*args, **kwargs)
         self.page = page
 
+        def show_detail(e):
+            self.page.go('/setting-account/detail')
+
+        submit_button = ft.ElevatedButton(
+            disabled=False,
+            text="Submit", on_click=show_detail)
+
         contents.controls.append(
             Row(
                 controls=[
@@ -27,11 +34,12 @@ class SettingContents():
                         horizontal_alignment="stretch",
                         controls=[
                             Card(content=Container(
-                                Text("Setting Your Account", weight="bold", size=32), padding=8)),
+                                Text("Setting Account", weight="bold", size=32), padding=8)),
                             Text("Update Your Profile..."),
                         ],
                         expand=True,
                     ),
+                    submit_button
                 ],
                 expand=True
             ))

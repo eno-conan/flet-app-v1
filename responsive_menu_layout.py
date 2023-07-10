@@ -81,13 +81,24 @@ if __name__ == "__main__":
                 dict(
                     icon=ft.icons.SETTINGS_OUTLINED,
                     selected_icon=ft.icons.SETTINGS,
-                    label="Setting Your Account",
+                    label="Setting Account",
                 ),
                 create_page(
                     page,
-                    "Minimize to icons",
+                    "Setting Account",
                 ),
             ),
+            # (
+            #     dict(
+            #         icon=None,
+            #         selected_icon=None,
+            #         label="Setting Account Detail",
+            #     ),
+            #     create_page(
+            #         page,
+            #         "Setting Account Detail",
+            #     ),
+            # ),
         ]
 
         menu_layout = ResponsiveMenuLayout(page, pages)
@@ -118,8 +129,10 @@ if __name__ == "__main__":
             ScrollCardListInfinite(page, contents)
         elif title == "Add Form":
             TextFieldsAndSubmit(page, contents)
-        else:
+        elif title == "Setting Account":
             SettingContents(page, contents)
+        else:
+            contents.controls.append(ft.Text("Others"))
         return contents
 
     ft.app(target=main, port=8550, assets_dir="assets", view=ft.WEB_BROWSER)

@@ -148,11 +148,14 @@ class ResponsiveMenuLayout(Row):
         # クリックしたタブに合わせて表示内容更新
 
     def _route_change(self, route):
+        print(route)
         # ログアウトしたときはトップページ表示
         if route == '/logout':
             route = '/'
         try:
             page_number = self.routes.index(route)
+            # if '/setting-account/detail' in route:
+            #     page_number = 4
         except ValueError:
             page_number = 0
 
@@ -168,27 +171,32 @@ class ResponsiveMenuLayout(Row):
     def build_navigation_rail(self):
         # initで定義するだけ
         return NavigationRail(
+            bgcolor=ft.colors.BLUE_50,
             selected_index=0,
-            label_type="none",
+            label_type=ft.NavigationRailLabelType.SELECTED,
             on_change=self._navigation_change,
         )
 
     def update_destinations(self, icons_only=False):
         navigation_items = self.navigation_items
-        if icons_only:
-            navigation_items = deepcopy(navigation_items)
-            for item in navigation_items:
-                item.pop("label")
+        # if icons_only:
+        #     navigation_items = deepcopy(navigation_items)
+        #     for item in navigation_items:
+        #         if item['icon'] is not None
+        #         item.pop("label")
 
-        if self.page.auth is None:
-            _navigation_items = []
-            _navigation_items.append(navigation_items[0])
-            _navigation_items.append(navigation_items[1])
-            _navigation_items.append(navigation_items[2])
-            navigation_items = _navigation_items
+        # if self.page.auth is None:
+        #     _navigation_items = []
+        #     _navigation_items.append(navigation_items[0])
+        #     _navigation_items.append(navigation_items[1])
+        #     _navigation_items.append(navigation_items[2])
+        #     _navigation_items.append(navigation_items[3])
+        #     navigation_items = _navigation_items
 
         self.navigation_rail.destinations = [
-            NavigationRailDestination(**nav_specs) for nav_specs in navigation_items
+            NavigationRailDestination(
+                **nav_specs,
+            ) for nav_specs in navigation_items
         ]
 
     def handle_resize(self, e):
