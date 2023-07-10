@@ -17,7 +17,7 @@ from flet import (
 from layout import ResponsiveMenuLayout
 from google_auth import GoogleOAuth
 from switch_right_dark import ToggleDarkLight
-from text_fields import TextFieldsAndSubmit
+from add_form import TextFieldsAndSubmit
 from card_list import ScrollCardList
 from setting_contents import SettingContents
 

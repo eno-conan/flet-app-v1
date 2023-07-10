@@ -20,7 +20,7 @@ from flet import (
     icons
 )
 from flet.utils import slugify
-from text_fields import TextFieldsAndSubmit
+from add_form import TextFieldsAndSubmit
 from setting_contents import SettingContents
 
 

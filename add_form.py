@@ -25,6 +25,7 @@ class TextFieldsAndSubmit():
     ):
         super().__init__(*args, **kwargs)
         self.page = page
+        page.dialog = ft.AlertDialog()
 
         def button_clicked(e):
             try:
@@ -40,10 +41,10 @@ class TextFieldsAndSubmit():
                 # clear input values
                 company_name_textfield.value = ""
                 contract_name_textfield.value = ""
-                # category_text.value
+                category_text.value = None
                 date_textfield.value = ""
                 # close Modal
-                dlg_modal.open = False
+                page.dialog.open = False
                 page.banner.open = True
                 # page.snack_bar.open = True
                 submit_button.disabled = True
@@ -116,41 +117,39 @@ class TextFieldsAndSubmit():
             ],
         )
 
-        # def create_modal_content(e):
-        #     return
-
+        # このモーダルの内容が初期表示段階で構築されるから、各値が何も表示できていない。
+        # 表示内容を都度更新できるように工夫：モーダルを開くタイミングでダイアログを構築する
+        # https://flet.dev/docs/controls/alertdialog
         def open_dlg_modal(e):
-            page.dialog = dlg_modal
-            dlg_modal.open = True
+            page.dialog = ft.AlertDialog(
+                modal=True,
+                title=ft.Text("Confirm Create Seminar"),
+                # content=ft.Text("Do you really want to delete all those files?"),
+                content=ft.Container(
+                    height=150,
+                    width=200,
+                    content=Column(
+                        [
+                            ft.Text(company_name_textfield.value),
+                            ft.Text(contract_name_textfield.value),
+                            ft.Text(category_text.value),
+                            ft.Text(date_textfield.value),
+                        ]
+                    )),
+                actions=[
+                    ft.TextButton("Create Seminar!", on_click=button_clicked),
+                    ft.TextButton("Fix", on_click=close_dlg),
+                ],
+                actions_alignment=ft.MainAxisAlignment.END,
+                on_dismiss=lambda e: print("Modal dialog dismissed!"),
+            )
+            page.dialog.open = True
             page.update()
 
         def close_dlg(e):
-            dlg_modal.open = False
+            page.dialog.open = False
             page.update()
-
-        dlg_modal = ft.AlertDialog(
-            modal=True,
-            title=ft.Text("Confirm Create Seminar"),
-            # content=ft.Text("Do you really want to delete all those files?"),
-            content=ft.Container(
-                height=150,
-                width=200,
-                content=Column(
-                    [
-                        ft.Text(company_name_textfield.value),
-                        ft.Text(contract_name_textfield.value),
-                        ft.Text(category_text.value),
-                        ft.Text(date_textfield.value),
-                    ]
-                )),
-            actions=[
-                ft.TextButton("Create Seminar!", on_click=button_clicked),
-                ft.TextButton("Fix", on_click=close_dlg),
-            ],
-            actions_alignment=ft.MainAxisAlignment.END,
-            on_dismiss=lambda e: print("Modal dialog dismissed!"),
-        )
-
+        
         # Submit
         submit_button = ft.ElevatedButton(
             disabled=True,
