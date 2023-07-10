@@ -136,16 +136,3 @@ if __name__ == "__main__":
         return contents
 
     ft.app(target=main, port=8550, assets_dir="assets", view=ft.WEB_BROWSER)
-    # def toggle_icons_only(menu: ResponsiveMenuLayout):
-    #     menu.minimize_to_icons = not menu.minimize_to_icons
-    #     menu.page.update()
-    # def toggle_menu_width(menu: ResponsiveMenuLayout):
-    #     # Menu\nwidth：クリック時のイベント
-    #     # トグルがONの状態のとき、アイコンの横にラベルが表示される
-    #     menu.menu_extended = not menu.menu_extended
-    #     menu.page.update()
-    # Add Button
-    # menu_layout.navigation_rail.leading = ElevatedButton(
-    #     "Add", icon=icons.ADD, expand=True, on_click=lambda e: print("Add clicked")
-    # )
-    # page.scroll = "always"

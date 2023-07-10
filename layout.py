@@ -54,6 +54,7 @@ class ResponsiveMenuLayout(Row):
             spacing=0,
             tight=True,
         )
+        page.on_view_pop = self.view_pop
 
         self.content_area = Column(page_contents, expand=True)
         self._was_portrait = self.is_portrait()
@@ -68,6 +69,15 @@ class ResponsiveMenuLayout(Row):
         self._change_displayed_page()
 
         self.page.on_resize = self.handle_resize
+
+    def view_pop(self, view):
+        self.page.views.pop()
+        top_view = self.page.views[-1]
+        # Noneの場合は、settingのトップに戻る
+        if top_view.route is None:
+            self.page.go('/setting-account')
+        else:
+            self.page.go('/')
 
     def select_page(self, page_number):
         # タブから各ページ選択
@@ -148,7 +158,7 @@ class ResponsiveMenuLayout(Row):
         # クリックしたタブに合わせて表示内容更新
 
     def _route_change(self, route):
-        print(route)
+        # print(route)
         # ログアウトしたときはトップページ表示
         if route == '/logout':
             route = '/'
