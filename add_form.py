@@ -30,7 +30,11 @@ class TextFieldsAndSubmit():
             # 入力値初期化
             seminar_name_textfield.value = ""
             description_textfield.value = ""
-            category_text.value = None
+            dd.value = ""
+            start_hour_dd.value = ""
+            start_minute_dd.value = ""
+            end_hour_dd.value = ""
+            end_minute_dd.value = ""
             date_textfield.value = ""
             # モーダル非表示・バナー表示
             page.dialog.open = False
@@ -76,8 +80,12 @@ class TextFieldsAndSubmit():
 
         def textfield_change(e):
             msg_invalid_date.visible = False
-            if seminar_name_textfield.value == "" or description_textfield.value == "":
+            if seminar_name_textfield.value == "" or description_textfield.value == "" or participates_textfield.value == "":
                 submit_button.disabled = True
+            # 参加人数のチェック
+            # elif int(participates_textfield.value) < 1:
+            #     submit_button.disabled = True
+            # 開催日の文字長チェック
             elif len(date_textfield.value) != 10:
                 submit_button.disabled = True
             else:
@@ -111,7 +119,14 @@ class TextFieldsAndSubmit():
             cursor_height=20,
             label="Description", on_change=textfield_change)
 
-        def dropdown_changed(e):
+        participates_textfield = ft.TextField(
+            keyboard_type=ft.KeyboardType.NUMBER,  # for mobile option
+            height=50,
+            width=200,
+            cursor_height=20,
+            label="number", on_change=textfield_change)
+
+        def category_dropdown_changed(e):
             category_text.value = dd.value
             page.update()
 
@@ -121,11 +136,10 @@ class TextFieldsAndSubmit():
         for category in ['Java', 'Python', 'Flutter', 'React', 'Javascript', 'Docker']:
             categories_arr.append(ft.dropdown.Option(category))
         dd = ft.Dropdown(
-            on_change=dropdown_changed,
+            on_change=category_dropdown_changed,
             bgcolor=ft.colors.BLUE_200,
             options=categories_arr,
             width=300,
-            # alignment=ft.alignment.top_center
         )
 
         # 開催日（テキストフィールド）
@@ -135,6 +149,63 @@ class TextFieldsAndSubmit():
             width=300,
             label="Please Input yyyy/mm/dd",
             on_change=textfield_change)
+
+        # 開始時間・終了時間（DropDown）
+        start_hour = ft.Text()
+        end_hour = ft.Text()
+        start_hour_arr = []
+        end_hour_arr = []
+
+        def start_hour_dropdown_changed(e):
+            start_hour.value = start_hour_dd.value
+            page.update()
+
+        def end_hour_dropdown_changed(e):
+            end_hour.value = end_hour_dd.value
+            page.update()
+        for i in range(1, 25):
+            start_hour_arr.append(ft.dropdown.Option(str(i).zfill(2)))  # 0埋め
+            end_hour_arr.append(ft.dropdown.Option(str(i).zfill(2)))  # 0埋め
+        start_hour_dd = ft.Dropdown(
+            on_change=start_hour_dropdown_changed,
+            bgcolor=ft.colors.BLUE_200,
+            options=start_hour_arr,
+            width=75,
+        )
+        end_hour_dd = ft.Dropdown(
+            on_change=end_hour_dropdown_changed,
+            bgcolor=ft.colors.BLUE_200,
+            options=end_hour_arr,
+            width=75,
+        )
+
+        start_minute = ft.Text()
+        end_minute = ft.Text()
+        start_minute_arr = []
+        end_minute_arr = []
+
+        def start_minute_dropdown_changed(e):
+            start_minute.value = start_minute_dd.value
+            page.update()
+
+        def end_minute_dropdown_changed(e):
+            end_minute.value = end_minute_dd.value
+            page.update()
+        for i in ['00', '15', '30', '45']:
+            start_minute_arr.append(ft.dropdown.Option(i))
+            end_minute_arr.append(ft.dropdown.Option(i))
+        start_minute_dd = ft.Dropdown(
+            on_change=start_minute_dropdown_changed,
+            bgcolor=ft.colors.BLUE_200,
+            options=start_minute_arr,
+            width=75,
+        )
+        end_minute_dd = ft.Dropdown(
+            on_change=end_minute_dropdown_changed,
+            bgcolor=ft.colors.BLUE_200,
+            options=end_minute_arr,
+            width=75,
+        )
 
         # 公開設定（False：下書き状態）
         is_public = ft.Switch(label="", value=False,)
@@ -216,6 +287,14 @@ class TextFieldsAndSubmit():
                               margin=ft.margin.symmetric(
                         horizontal=30, vertical=5)
                     ),
+                    Container(content=Text("参加人数", size=20),
+                              margin=ft.margin.symmetric(horizontal=20,)
+                              ),
+                    Container(
+                        content=participates_textfield,
+                        margin=ft.margin.only(
+                            left=30, top=10)
+                    ),
                     Container(content=Text("開催日", size=20),
                               margin=ft.margin.symmetric(horizontal=20,)
                               ),
@@ -223,6 +302,16 @@ class TextFieldsAndSubmit():
                               margin=ft.margin.only(
                                   left=30, top=10)
                               ),
+                    Container(
+                        content=Row(
+                            [
+                                start_hour_dd, start_minute_dd,
+                                Text(' ~ '), end_hour_dd, end_minute_dd
+                            ]
+                        ),
+                        margin=ft.margin.symmetric(
+                            horizontal=30, vertical=5)
+                    ),
                     Container(content=msg_invalid_date,
                               margin=ft.margin.symmetric(
                                   horizontal=30)
