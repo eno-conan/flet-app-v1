@@ -29,7 +29,7 @@ class ResponsiveMenuLayout(Row):
     ):
         super().__init__(*args, **kwargs)
         self.page = page
-        self.page.window_width = 700
+        # self.page.window_width = 1000
         self.pages = pages
 
         self._minimize_to_icons = minimize_to_icons
@@ -181,7 +181,7 @@ class ResponsiveMenuLayout(Row):
     def build_navigation_rail(self):
         # initで定義するだけ
         return NavigationRail(
-            bgcolor=ft.colors.BLUE_50,
+            # bgcolor=ft.colors.BLUE_50,
             selected_index=0,
             label_type=ft.NavigationRailLabelType.SELECTED,
             on_change=self._navigation_change,
