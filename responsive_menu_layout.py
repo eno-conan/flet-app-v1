@@ -29,13 +29,13 @@ load_dotenv()
 
 if __name__ == "__main__":
 
-    def main(page: Page, title="Basic Responsive Menu"):
+    def main(page: Page, title="Flet Seminar App"):
 
         page.title = title
         page.theme_mode = "light"
         menu_button = IconButton(icons.MENU, icon_color=ft.colors.WHITE)
         page.appbar = AppBar(
-            title=Text(f"My Flet Sample App", size=32, color=ft.colors.WHITE),
+            title=Text(f"Flet App", size=32, color=ft.colors.WHITE),
             leading=menu_button,
             center_title=True,
             leading_width=40,
@@ -88,17 +88,6 @@ if __name__ == "__main__":
                     "Setting Account",
                 ),
             ),
-            # (
-            #     dict(
-            #         icon=None,
-            #         selected_icon=None,
-            #         label="Setting Account Detail",
-            #     ),
-            #     create_page(
-            #         page,
-            #         "Setting Account Detail",
-            #     ),
-            # ),
         ]
 
         menu_layout = ResponsiveMenuLayout(page, pages)
@@ -125,8 +114,8 @@ if __name__ == "__main__":
             )
             contents.controls.append(img)
         elif title == "Card List":
-            # ScrollCardList(page, contents)
-            ScrollCardListInfinite(page, contents)
+            ScrollCardList(page, contents)
+            # ScrollCardListInfinite(page, contents)
         elif title == "Add Form":
             TextFieldsAndSubmit(page, contents)
         elif title == "Setting Account":

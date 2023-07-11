@@ -26,9 +26,21 @@ class TextFieldsAndSubmit():
         self.page = page
         page.dialog = ft.AlertDialog()
 
+        def reset_state():
+            # 入力値初期化
+            seminar_name_textfield.value = ""
+            description_textfield.value = ""
+            category_text.value = None
+            date_textfield.value = ""
+            # モーダル非表示・バナー表示
+            page.dialog.open = False
+            page.banner.open = True
+            # page.snack_bar.open = True
+            submit_button.disabled = True
+
         def button_clicked(e):
             try:
-                # create POST request
+                # POSTリクエスト作成
                 # url = os.getenv('WORKERS_URL')
                 # data = {
                 #     'CompanyName': seminar_name_textfield.value,
@@ -36,17 +48,16 @@ class TextFieldsAndSubmit():
                 # }
                 # data_encode = json.dumps(data)
                 # requests.post(url, data=data_encode)
+                print(seminar_name_textfield.value,
+                      description_textfield.value,
+                      category_text.value,
+                      date_textfield.value,
+                      is_public.value
+                      )
 
-                # 入力値初期化
-                seminar_name_textfield.value = ""
-                description_textfield.value = ""
-                category_text.value = None
-                date_textfield.value = ""
-                # Modal
-                page.dialog.open = False
-                page.banner.open = True
-                # page.snack_bar.open = True
-                submit_button.disabled = True
+                # 初期表示状態に戻す
+                reset_state()
+
                 page.update()
             except Exception as e:
                 print(e)
@@ -54,7 +65,6 @@ class TextFieldsAndSubmit():
                 # page.update()
 
         # 不正日付のメッセージ表示
-        # msg_invalid_date_text = ft.Text()
         msg_invalid_date = Row(
             [
                 ft.Text("日付の形式がyyyy/mm/ddではない、または存在しない日付です。",
@@ -93,8 +103,12 @@ class TextFieldsAndSubmit():
 
         # text fields
         seminar_name_textfield = ft.TextField(
+            height=50,
+            cursor_height=20,
             label="Seminar Name", on_change=textfield_change)
         description_textfield = ft.TextField(
+            height=50,
+            cursor_height=20,
             label="Description", on_change=textfield_change)
 
         def dropdown_changed(e):
@@ -111,13 +125,19 @@ class TextFieldsAndSubmit():
             bgcolor=ft.colors.BLUE_200,
             options=categories_arr,
             width=300,
+            # alignment=ft.alignment.top_center
         )
 
         # 開催日（テキストフィールド）
         date_textfield = ft.TextField(
+            height=50,
+            cursor_height=20,
             width=300,
             label="Please Input yyyy/mm/dd",
             on_change=textfield_change)
+
+        # 公開設定（False：下書き状態）
+        is_public = ft.Switch(label="", value=False,)
 
         def close_banner(e):
             page.banner.open = False
@@ -130,7 +150,7 @@ class TextFieldsAndSubmit():
             leading=ft.Icon(ft.icons.CHECK_CIRCLE_OUTLINE,
                             color=ft.colors.GREEN_500, size=40),
             content=ft.Text(
-                "Oops, there were some errors while trying to delete the file. What would you like me to do?",
+                "Success! Create Seminar!",
                 font_family=ft.FontWeight.W_500,
                 size=18,
             ),
@@ -168,30 +188,34 @@ class TextFieldsAndSubmit():
             page.dialog.open = False
             page.update()
 
-        # Submit
+        # Submitボタン
         submit_button = ft.ElevatedButton(
             disabled=True,
             text="Submit", on_click=open_dlg_modal)
 
-        # 表示内容
-        contents.controls.append(
+        # スクロール可能な状態にするため
+        lv = ft.ListView(expand=True, spacing=15, auto_scroll=False)
+        lv.controls.append(
             Column(
                 [
                     Container(content=Text("セミナー追加", size=32),
                               margin=ft.margin.symmetric(horizontal=20,
-                              vertical=10)),
+                                                         vertical=5)),
+                    Container(content=Text("セミナー名・概要", size=20),
+                              margin=ft.margin.symmetric(horizontal=20,)
+                              ),
                     Container(content=Column(
                         [seminar_name_textfield, description_textfield]
                     ),
-                        margin=ft.margin.symmetric(horizontal=30, vertical=10)
+                        margin=ft.margin.symmetric(horizontal=30, vertical=5)
                     ),
                     Container(content=Text("ジャンル選択", size=20),
                               margin=ft.margin.symmetric(horizontal=20,)
                               ),
                     Container(content=Column([dd]),
                               margin=ft.margin.symmetric(
-                                  horizontal=30, vertical=10)
-                              ),
+                        horizontal=30, vertical=5)
+                    ),
                     Container(content=Text("開催日", size=20),
                               margin=ft.margin.symmetric(horizontal=20,)
                               ),
@@ -203,13 +227,24 @@ class TextFieldsAndSubmit():
                               margin=ft.margin.symmetric(
                                   horizontal=30)
                               ),
+                    Container(content=Text("公開設定", size=20),
+                              margin=ft.margin.symmetric(horizontal=20,)
+                              ),
+                    Container(content=Text("選択：公開 / 非選択：下書き", size=14),
+                              margin=ft.margin.symmetric(horizontal=30,)
+                              ),
+                    Container(content=is_public,
+                              margin=ft.margin.symmetric(
+                                  horizontal=30)
+                              ),
                     Container(content=submit_button,
                               margin=ft.margin.only(right=25),
                               alignment=ft.alignment.center_right
                               ),
-                ]
-            )
-        )
+                ],
+            ))
+        # 表示内容
+        contents.controls.append(lv)
 
 # Notify=================================
         # https://flet.dev/docs/controls/banner
