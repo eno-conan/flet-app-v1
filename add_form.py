@@ -70,11 +70,14 @@ class TextFieldsAndSubmit():
 
         def update_disable_submit_button():
             # 入力前の段階では非活性確定
-            for field in [seminar_name_textfield, description_textfield, participates_textfield, date_textfield]:
+            for field in [seminar_name_textfield, description_textfield, participates_textfield,
+                          date_textfield, start_hour_dd, start_minute_dd, end_hour_dd, end_minute_dd]:
                 if field.value == "":
                     return
-            if invalid_msg_seminar_name_description.visible or invalid_msg_participates.visible or invalid_msg_date.visible:
-                return
+            for valid_state in [invalid_msg_seminar_name_description, invalid_msg_participates,
+                                invalid_msg_date, invalid_msg_datetime]:
+                if valid_state.visible:
+                    return
             else:
                 submit_button.disabled = False
             page.update()
@@ -159,7 +162,7 @@ class TextFieldsAndSubmit():
         )
 
         def change_date(e):
-            # invalid_msg_date.visible = False
+            invalid_msg_date.visible = False
             if len(date_textfield.value) != 10:
                 return
             is_exist_date = False
