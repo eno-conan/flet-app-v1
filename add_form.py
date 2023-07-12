@@ -9,7 +9,8 @@ from flet import (
     Row,
     Switch,
     Text,
-    icons
+    icons,
+    TextButton
 )
 import datetime
 
@@ -72,14 +73,14 @@ class TextFieldsAndSubmit():
             # 入力前の段階では非活性確定
             for field in [seminar_name_textfield, description_textfield, participates_textfield,
                           date_textfield, start_hour_dd, start_minute_dd, end_hour_dd, end_minute_dd]:
-                if field.value == "":
+                if field.value == "" or field.value is None:
                     return
             for valid_state in [invalid_msg_seminar_name_description, invalid_msg_participates,
                                 invalid_msg_date, invalid_msg_datetime]:
                 if valid_state.visible:
                     return
-            else:
-                submit_button.disabled = False
+                else:
+                    submit_button.disabled = False
             page.update()
 
         # セミナー名・概要=========================
@@ -108,6 +109,27 @@ class TextFieldsAndSubmit():
             cursor_height=20,
             label="Description", on_change=change_seminar_name_description)
 
+        # 表示内容設定
+        seminar_name_description_area = Column()
+        seminar_name_description_area.controls.append(
+            Container(content=Text("セミナー名・概要", size=20),
+                      margin=ft.margin.symmetric(horizontal=20,)
+                      )
+        )
+        seminar_name_description_area.controls.append(
+            Container(content=Column(
+                [seminar_name_textfield, description_textfield]
+            ),
+                margin=ft.margin.symmetric(horizontal=30, vertical=5)
+            )
+        )
+        seminar_name_description_area.controls.append(
+            Container(content=invalid_msg_seminar_name_description,
+                      margin=ft.margin.symmetric(
+                          horizontal=30)
+                      )
+        )
+
         # 参加者数=========================
         invalid_msg_participates = Row(
             [
@@ -135,6 +157,27 @@ class TextFieldsAndSubmit():
             cursor_height=20,
             label="number", on_change=change_participates)
 
+        participates_area = Column()
+        participates_area.controls.append(
+            Container(content=Text("参加人数", size=20),
+                      margin=ft.margin.symmetric(
+                horizontal=20,)
+            )
+        )
+        participates_area.controls.append(
+            Container(
+                content=participates_textfield,
+                margin=ft.margin.only(
+                    left=30, top=10)
+            )
+        )
+        participates_area.controls.append(
+            Container(content=invalid_msg_participates,
+                      margin=ft.margin.symmetric(
+                          horizontal=30)
+                      )
+        )
+
         # カテゴリ=========================
         def category_dropdown_changed(e):
             category_text.value = dd.value
@@ -149,6 +192,22 @@ class TextFieldsAndSubmit():
             bgcolor=ft.colors.BLUE_200,
             options=categories_arr,
             width=300,
+        )
+
+        # 表示内容設定
+        category_area = Column()
+        category_area.controls.append(
+            Container(
+                Container(content=Text("カテゴリ選択", size=20),
+                          margin=ft.margin.symmetric(horizontal=20,)
+                          ),
+            )
+        )
+        category_area.controls.append(
+            Container(content=Column([dd]),
+                      margin=ft.margin.symmetric(
+                horizontal=30, vertical=5)
+            ),
         )
 
         # 開催日=========================
@@ -190,6 +249,26 @@ class TextFieldsAndSubmit():
             label="yyyy/mm/dd",
             on_change=change_date)
 
+        # 表示内容設定
+        date_area = Column()
+        date_area.controls.append(
+            Container(content=Text("開催日時", size=20),
+                      margin=ft.margin.symmetric(horizontal=20,)
+                      ),
+        )
+        date_area.controls.append(
+            Container(content=date_textfield,
+                      margin=ft.margin.only(
+                          left=30, top=10)
+                      ),
+        )
+        date_area.controls.append(
+            Container(content=invalid_msg_date,
+                      margin=ft.margin.symmetric(
+                          horizontal=30)
+                      ),
+        )
+
         # 開始時間・終了時間=========================
         invalid_msg_datetime = Row(
             [
@@ -203,14 +282,15 @@ class TextFieldsAndSubmit():
         def change_start_end_time():
             invalid_msg_datetime.visible = False
             for t in [start_hour, start_minute, end_hour, end_minute]:
-                # print(t.value)
                 if t.value is None:
                     return
             if int(start_hour.value) > int(end_hour.value):
                 invalid_msg_datetime.visible = True
             else:
-                if int(start_minute.value) > int(end_minute.value):
-                    invalid_msg_datetime.visible = True
+                if int(start_hour.value) == int(end_hour.value):
+                    if int(start_minute.value) >= int(end_minute.value):
+                        invalid_msg_datetime.visible = True
+            update_disable_submit_button()
             page.update()
 
         start_hour = ft.Text()
@@ -275,8 +355,52 @@ class TextFieldsAndSubmit():
             width=75,
         )
 
+        # 表示内容設定
+        date_time_area = Column()
+        date_time_area.controls.append(
+            Container(
+                content=Row(
+                    [
+                        start_hour_dd, Text(
+                            ':', weight=ft.FontWeight.W_500, size=18),
+                        start_minute_dd,
+                        Text(' ~ ', weight=ft.FontWeight.W_500, size=18),
+                        end_hour_dd, Text(
+                            ':', weight=ft.FontWeight.W_500, size=18),
+                        end_minute_dd
+                    ]
+                ),
+                margin=ft.margin.symmetric(
+                    horizontal=30, vertical=5)
+            )
+        )
+        date_time_area.controls.append(
+            Container(content=invalid_msg_datetime,
+                      margin=ft.margin.symmetric(
+                          horizontal=30)
+                      )
+        )
+
         # 公開設定=========================
-        is_public = ft.Switch(label="", value=False,)  # False：下書き状
+        is_public = ft.Switch(label="", value=False,)  # False：下書き
+        # 表示内容設定
+        is_public_area = Column()
+        is_public_area.controls.append(
+            Container(content=Text("公開設定", size=20),
+                      margin=ft.margin.symmetric(horizontal=20,)
+                      )
+        )
+        is_public_area.controls.append(
+            Container(content=Text("選択：公開 / 非選択：下書き", size=14),
+                      margin=ft.margin.symmetric(horizontal=30,)
+                      )
+        )
+        is_public_area.controls.append(
+            Container(content=is_public,
+                      margin=ft.margin.symmetric(
+                          horizontal=30)
+                      )
+        )
 
         def close_banner(e):
             page.banner.open = False
@@ -303,19 +427,45 @@ class TextFieldsAndSubmit():
                 modal=True,
                 title=ft.Text("Confirm Create Seminar"),
                 content=ft.Container(
-                    height=150,
-                    width=200,
+                    height=200,
+                    width=300,
                     content=Column(
                         [
-                            ft.Text(seminar_name_textfield.value),
-                            ft.Text(description_textfield.value),
-                            ft.Text(category_text.value),
-                            ft.Text(date_textfield.value),
+                            Row([
+
+                                Text("セミナー名："),
+                                Text(seminar_name_textfield.value)
+                            ]),
+                            Row([
+                                Text("概要："),
+                                Text(description_textfield.value)
+                            ]),
+                            Row([
+                                Text("カテゴリ："),
+                                Text(category_text.value)
+                           ]),
+                            Row([
+                                Text("参加者"),
+                                Text(participates_textfield.value)
+                            ]),
+                            Row([
+                                Text("開催日："),
+                                Text(date_textfield.value)
+                            ]),
+                            Row([
+                                Text("開催時刻："),
+                                Text(start_hour.value), Text(" : "),
+                                Text(start_minute.value),
+                                Text(" ~ "),
+                                Text(end_hour.value), Text(" : "),
+                                Text(end_minute.value),
+                            ]
+                            ),
                         ]
                     )),
                 actions=[
-                    ft.TextButton("Create Seminar!", on_click=button_clicked),
-                    ft.TextButton("Fix", on_click=close_dlg),
+                    TextButton("Create Seminar!", on_click=button_clicked),
+                    TextButton("Fix", on_click=close_dlg),
                 ],
                 actions_alignment=ft.MainAxisAlignment.END,
                 on_dismiss=lambda e: print("Modal dialog dismissed!"),
@@ -339,77 +489,12 @@ class TextFieldsAndSubmit():
                     Container(content=Text("セミナー追加", size=32),
                               margin=ft.margin.symmetric(horizontal=20,
                                                          vertical=5)),
-                    Container(content=Text("セミナー名・概要", size=20),
-                              margin=ft.margin.symmetric(horizontal=20,)
-                              ),
-                    Container(content=Column(
-                        [seminar_name_textfield, description_textfield]
-                    ),
-                        margin=ft.margin.symmetric(horizontal=30, vertical=5)
-                    ),
-                    Container(content=invalid_msg_seminar_name_description,
-                              margin=ft.margin.symmetric(
-                                  horizontal=30)
-                              ),
-                    Container(content=Text("ジャンル選択", size=20),
-                              margin=ft.margin.symmetric(horizontal=20,)
-                              ),
-                    Container(content=Column([dd]),
-                              margin=ft.margin.symmetric(
-                        horizontal=30, vertical=5)
-                    ),
-                    Container(content=Text("参加人数", size=20),
-                              margin=ft.margin.symmetric(horizontal=20,)
-                              ),
-                    Container(
-                        content=participates_textfield,
-                        margin=ft.margin.only(
-                            left=30, top=10)
-                    ),
-                    Container(content=invalid_msg_participates,
-                              margin=ft.margin.symmetric(
-                                  horizontal=30)
-                              ),
-                    Container(content=Text("開催日", size=20),
-                              margin=ft.margin.symmetric(horizontal=20,)
-                              ),
-                    Container(content=date_textfield,
-                              margin=ft.margin.only(
-                                  left=30, top=10)
-                              ),
-                    Container(content=invalid_msg_date,
-                              margin=ft.margin.symmetric(
-                                  horizontal=30)
-                              ),
-                    Container(
-                        content=Row(
-                            [
-                                start_hour_dd, Text(
-                                    ':', weight=ft.FontWeight.W_500, size=18),
-                                start_minute_dd,
-                                Text(' ~ ', weight=ft.FontWeight.W_500, size=18),
-                                end_hour_dd, Text(
-                                    ':', weight=ft.FontWeight.W_500, size=18),
-                                end_minute_dd
-                            ]
-                        ),
-                        margin=ft.margin.symmetric(
-                            horizontal=30, vertical=5)
-                    ),
-                    Container(content=invalid_msg_datetime,
-                              margin=ft.margin.symmetric(
-                                  horizontal=30)
-                              ),
-                    Container(content=Text("公開設定", size=20),
-                              margin=ft.margin.symmetric(horizontal=20,)
-                              ),
-                    Container(content=Text("選択：公開 / 非選択：下書き", size=14),
-                              margin=ft.margin.symmetric(horizontal=30,)
-                              ),
-                    Container(content=is_public,
-                              margin=ft.margin.symmetric(
-                                  horizontal=30)
-                              ),
+                    seminar_name_description_area,  # セミナー名・概要
+                    category_area,  # カテゴリ
+                    participates_area,  # 参加人数
+                    date_area,  # 開催日
+                    date_time_area,  # 開催時間
+                    is_public_area,  # 公開設定
                     Container(content=submit_button,
                               margin=ft.margin.only(right=25, bottom=25),
                               alignment=ft.alignment.center_right
@@ -418,14 +503,3 @@ class TextFieldsAndSubmit():
             ))
         # 表示内容
         contents.controls.append(lv)
-
-# Notify=================================
-        # https://flet.dev/docs/controls/banner
-        # https://flet.dev/docs/controls/snackbar
-        # page.snack_bar = ft.SnackBar(
-        #     content=ft.Text("Create New Seminar!!",),
-        #     action_color=ft.colors.LIME_300,
-        #     bgcolor=ft.colors.BLUE_700,
-        #     action="Alright!",
-        #     duration=5000
-        # )
