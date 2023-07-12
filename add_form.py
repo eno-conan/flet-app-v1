@@ -68,69 +68,75 @@ class TextFieldsAndSubmit():
                 # msg_failed_add_customer.visible = True
                 # page.update()
 
-        # 不正日付のメッセージ表示
-        msg_invalid_date = Row(
+        def update_disable_submit_button():
+            # 入力前の段階では非活性確定
+            for field in [seminar_name_textfield, description_textfield, participates_textfield, date_textfield]:
+                if field.value == "":
+                    return
+            if invalid_msg_seminar_name_description.visible or invalid_msg_participates.visible or invalid_msg_date.visible:
+                return
+            else:
+                submit_button.disabled = False
+            page.update()
+
+        # セミナー名・概要=========================
+        invalid_msg_seminar_name_description = Row(
             [
-                ft.Text("日付の形式がyyyy/mm/ddではない、または存在しない日付です。",
+                ft.Text("セミナー名・概要は必須入力です。",
                         size=20, color=ft.colors.RED_500
                         )
             ],
             visible=False
         )
 
-        def textfield_change(e):
-            msg_invalid_date.visible = False
-            if seminar_name_textfield.value == "" or description_textfield.value == "" or participates_textfield.value == "":
-                submit_button.disabled = True
-            # 参加人数のチェック
-            # elif int(participates_textfield.value) < 1:
-            #     submit_button.disabled = True
-            # 開催日の文字長チェック
-            elif len(date_textfield.value) != 10:
-                submit_button.disabled = True
-            else:
-                is_exist_date = False
-                try:
-                    date_split_slush = date_textfield.value.split('/')
-                    if len(date_split_slush) != 3:
-                        # スラッシュ分割で、配列の大きさが3ではない場合、フォーマット不正
-                        # msg_invalid_date_text.value = '日付の入力形式が正しくないです'
-                        msg_invalid_date.visible = True
-                    else:
-                        # 存在日付チェック
-                        new_data_str = "%04s/%02s/%02s" % (
-                            date_split_slush[0], date_split_slush[1], date_split_slush[2])
-                        datetime.datetime.strptime(new_data_str, "%Y/%m/%d")
-                        is_exist_date = True
-                        if is_exist_date:
-                            submit_button.disabled = False
-                except:
-                    # msg_invalid_date_text.value = '日付の入力形式が正しくないです'
-                    msg_invalid_date.visible = True
+        def change_seminar_name_description(e):
+            invalid_msg_seminar_name_description.visible = True
+            if not seminar_name_textfield.value == "" and not description_textfield.value == "":
+                invalid_msg_seminar_name_description.visible = False
             page.update()
+            update_disable_submit_button()
 
-        # text fields
         seminar_name_textfield = ft.TextField(
             height=50,
             cursor_height=20,
-            label="Seminar Name", on_change=textfield_change)
+            label="Seminar Name", on_change=change_seminar_name_description)
         description_textfield = ft.TextField(
             height=50,
             cursor_height=20,
-            label="Description", on_change=textfield_change)
+            label="Description", on_change=change_seminar_name_description)
+
+        # 参加者数=========================
+        invalid_msg_participates = Row(
+            [
+                ft.Text("参加者は0より大きい数で入力してください",
+                        size=20, color=ft.colors.RED_500
+                        )
+            ],
+            visible=False
+        )
+
+        def change_participates(e):
+            invalid_msg_participates.visible = True
+            try:
+                if int(participates_textfield.value) > 0:
+                    invalid_msg_participates.visible = False
+            except ValueError:
+                pass
+            page.update()
+            update_disable_submit_button()
 
         participates_textfield = ft.TextField(
             keyboard_type=ft.KeyboardType.NUMBER,  # for mobile option
             height=50,
             width=200,
             cursor_height=20,
-            label="number", on_change=textfield_change)
+            label="number", on_change=change_participates)
 
+        # カテゴリ=========================
         def category_dropdown_changed(e):
             category_text.value = dd.value
             page.update()
 
-        # DropDown(カテゴリ)
         category_text = ft.Text()
         categories_arr = []
         for category in ['Java', 'Python', 'Flutter', 'React', 'Javascript', 'Docker']:
@@ -142,15 +148,68 @@ class TextFieldsAndSubmit():
             width=300,
         )
 
-        # 開催日（テキストフィールド）
+        # 開催日=========================
+        invalid_msg_date = Row(
+            [
+                ft.Text("日付の形式がyyyy/mm/ddではない、または存在しない日付です。",
+                        size=20, color=ft.colors.RED_500
+                        )
+            ],
+            visible=False
+        )
+
+        def change_date(e):
+            # invalid_msg_date.visible = False
+            if len(date_textfield.value) != 10:
+                return
+            is_exist_date = False
+            try:
+                date_split_slush = date_textfield.value.split('/')
+                if len(date_split_slush) != 3:
+                    invalid_msg_date.visible = True
+                else:
+                    # 存在日付チェック
+                    new_data_str = "%04s/%02s/%02s" % (
+                        date_split_slush[0], date_split_slush[1], date_split_slush[2])
+                    datetime.datetime.strptime(new_data_str, "%Y/%m/%d")
+                    is_exist_date = True
+                    if is_exist_date:
+                        invalid_msg_date.visible = False
+            except:
+                invalid_msg_date.visible = True
+            update_disable_submit_button()
+            page.update()
+
         date_textfield = ft.TextField(
             height=50,
             cursor_height=20,
             width=300,
-            label="Please Input yyyy/mm/dd",
-            on_change=textfield_change)
+            label="yyyy/mm/dd",
+            on_change=change_date)
 
-        # 開始時間・終了時間（DropDown）
+        # 開始時間・終了時間=========================
+        invalid_msg_datetime = Row(
+            [
+                ft.Text("開始時刻と終了時刻の前後関係が正しくありません",
+                        size=20, color=ft.colors.RED_500
+                        )
+            ],
+            visible=False
+        )
+
+        def change_start_end_time():
+            invalid_msg_datetime.visible = False
+            for t in [start_hour, start_minute, end_hour, end_minute]:
+                # print(t.value)
+                if t.value is None:
+                    return
+            if int(start_hour.value) > int(end_hour.value):
+                invalid_msg_datetime.visible = True
+            else:
+                if int(start_minute.value) > int(end_minute.value):
+                    invalid_msg_datetime.visible = True
+            page.update()
+
         start_hour = ft.Text()
         end_hour = ft.Text()
         start_hour_arr = []
@@ -159,10 +218,13 @@ class TextFieldsAndSubmit():
         def start_hour_dropdown_changed(e):
             start_hour.value = start_hour_dd.value
             page.update()
+            change_start_end_time()
 
         def end_hour_dropdown_changed(e):
             end_hour.value = end_hour_dd.value
             page.update()
+            change_start_end_time()
+
         for i in range(1, 25):
             start_hour_arr.append(ft.dropdown.Option(str(i).zfill(2)))  # 0埋め
             end_hour_arr.append(ft.dropdown.Option(str(i).zfill(2)))  # 0埋め
@@ -187,10 +249,13 @@ class TextFieldsAndSubmit():
         def start_minute_dropdown_changed(e):
             start_minute.value = start_minute_dd.value
             page.update()
+            change_start_end_time()
 
         def end_minute_dropdown_changed(e):
             end_minute.value = end_minute_dd.value
             page.update()
+            change_start_end_time()
+
         for i in ['00', '15', '30', '45']:
             start_minute_arr.append(ft.dropdown.Option(i))
             end_minute_arr.append(ft.dropdown.Option(i))
@@ -207,8 +272,8 @@ class TextFieldsAndSubmit():
             width=75,
         )
 
-        # 公開設定（False：下書き状態）
-        is_public = ft.Switch(label="", value=False,)
+        # 公開設定=========================
+        is_public = ft.Switch(label="", value=False,)  # False：下書き状
 
         def close_banner(e):
             page.banner.open = False
@@ -259,12 +324,11 @@ class TextFieldsAndSubmit():
             page.dialog.open = False
             page.update()
 
-        # Submitボタン
+        # Submitボタン=========================
         submit_button = ft.ElevatedButton(
             disabled=True,
             text="Submit", on_click=open_dlg_modal)
 
-        # スクロール可能な状態にするため
         lv = ft.ListView(expand=True, spacing=15, auto_scroll=False)
         lv.controls.append(
             Column(
@@ -280,6 +344,10 @@ class TextFieldsAndSubmit():
                     ),
                         margin=ft.margin.symmetric(horizontal=30, vertical=5)
                     ),
+                    Container(content=invalid_msg_seminar_name_description,
+                              margin=ft.margin.symmetric(
+                                  horizontal=30)
+                              ),
                     Container(content=Text("ジャンル選択", size=20),
                               margin=ft.margin.symmetric(horizontal=20,)
                               ),
@@ -295,6 +363,10 @@ class TextFieldsAndSubmit():
                         margin=ft.margin.only(
                             left=30, top=10)
                     ),
+                    Container(content=invalid_msg_participates,
+                              margin=ft.margin.symmetric(
+                                  horizontal=30)
+                              ),
                     Container(content=Text("開催日", size=20),
                               margin=ft.margin.symmetric(horizontal=20,)
                               ),
@@ -302,17 +374,26 @@ class TextFieldsAndSubmit():
                               margin=ft.margin.only(
                                   left=30, top=10)
                               ),
+                    Container(content=invalid_msg_date,
+                              margin=ft.margin.symmetric(
+                                  horizontal=30)
+                              ),
                     Container(
                         content=Row(
                             [
-                                start_hour_dd, start_minute_dd,
-                                Text(' ~ '), end_hour_dd, end_minute_dd
+                                start_hour_dd, Text(
+                                    ':', weight=ft.FontWeight.W_500, size=18),
+                                start_minute_dd,
+                                Text(' ~ ', weight=ft.FontWeight.W_500, size=18),
+                                end_hour_dd, Text(
+                                    ':', weight=ft.FontWeight.W_500, size=18),
+                                end_minute_dd
                             ]
                         ),
                         margin=ft.margin.symmetric(
                             horizontal=30, vertical=5)
                     ),
-                    Container(content=msg_invalid_date,
+                    Container(content=invalid_msg_datetime,
                               margin=ft.margin.symmetric(
                                   horizontal=30)
                               ),
@@ -327,7 +408,7 @@ class TextFieldsAndSubmit():
                                   horizontal=30)
                               ),
                     Container(content=submit_button,
-                              margin=ft.margin.only(right=25),
+                              margin=ft.margin.only(right=25, bottom=25),
                               alignment=ft.alignment.center_right
                               ),
                 ],
