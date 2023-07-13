@@ -22,9 +22,9 @@ class SettingContents():
         self.page = page
 
         # タブ「主催セミナー一覧」
-        hosts = []
-        for i in range(15):
-            hosts.append(
+        hosts = Column(expand=True,)
+        for i in range(10):
+            hosts.controls.append(
                 ft.Container(
                     content=ft.Card(
                         content=ft.Container(
@@ -43,26 +43,21 @@ class SettingContents():
                                     ),
                                 ]
                             ),
-                            width=400,
                             padding=10,
                             margin=10,
                         )
                     ),
-                    col={"md": 4, "xl": 6},
                 )
             )
         hosts_seminars = Container(
-            ft.ResponsiveRow(
-                hosts,
-                alignment=ft.MainAxisAlignment.SPACE_BETWEEN
-            ),
+            content=hosts,
             margin=ft.margin.only(top=10, left=20),
         )
 
         # タブ「参加予定セミナー一覧」
-        participates = []
-        for i in range(15):
-            participates.append(
+        participates = Column(expand=True,)
+        for i in range(10):
+            participates.controls.append(
                 ft.Container(
                     content=ft.Card(
                         content=ft.Container(
@@ -81,19 +76,14 @@ class SettingContents():
                                     ),
                                 ]
                             ),
-                            width=400,
                             padding=10,
                             margin=10,
                         )
                     ),
-                    col={"md": 4, "xl": 6},
                 )
             )
         participate_seminars = Container(
-            ft.ResponsiveRow(
-                participates,
-                alignment=ft.MainAxisAlignment.SPACE_BETWEEN
-            ),
+            content=participates,
             margin=ft.margin.only(top=10, left=20),
         )
 
@@ -143,7 +133,6 @@ class SettingContents():
                     ),
                 ],
                 expand=True,
-                scrollable=True
             )
         )
         lv.controls.append(tab_bar_contents)
