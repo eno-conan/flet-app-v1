@@ -32,13 +32,13 @@ class SettingContents():
                                 [
                                     ft.ListTile(
                                         title=ft.Text(
-                                            "The Enchanted Nightingale"),
+                                            "Javaは簡単ではない", weight=ft.FontWeight.W_700),
                                         subtitle=ft.Text(
-                                            "Music by Julie Gable. Lyrics by Sidney Stein."
+                                            "Javaは決して簡単ではない・・・"
                                         ),
                                     ),
                                     ft.Row(
-                                        [ft.TextButton("Check!"),],
+                                        [ft.TextButton("内容確認"),],
                                         alignment=ft.MainAxisAlignment.END,
                                     ),
                                 ]
@@ -65,13 +65,13 @@ class SettingContents():
                                 [
                                     ft.ListTile(
                                         title=ft.Text(
-                                            "The Enchanted Nightingale"),
+                                            "フロントエンド基礎", weight=ft.FontWeight.W_700),
                                         subtitle=ft.Text(
-                                            "Music by Julie Gable. Lyrics by Sidney Stein."
+                                            "Reactを学習してみよう"
                                         ),
                                     ),
                                     ft.Row(
-                                        [ft.TextButton("Check!"),],
+                                        [ft.TextButton("詳細確認"),],
                                         alignment=ft.MainAxisAlignment.END,
                                     ),
                                 ]
@@ -99,7 +99,7 @@ class SettingContents():
         # 各タブの土台構築
         lv = ft.ListView(expand=True, spacing=5, auto_scroll=False)
         tab_bar_contents = Container(
-            margin=ft.margin.only(top=5, left=20),
+            margin=ft.margin.only(top=5, left=10),
             content=ft.Tabs(
                 selected_index=0,
                 animation_duration=300,
@@ -112,11 +112,11 @@ class SettingContents():
                         text="Check Participate seminar",
                         # tab_content=ft.Icon(ft.icons.SEARCH),
                         content=participate_seminars),
-                    ft.Tab(
-                        text="Update User name (password)",
-                        # icon=ft.icons.SETTINGS,
-                        content=ft.Text("This is Tab 3"),
-                    ),
+                    # ft.Tab(
+                    #     text="Update User name (password)",
+                    #     # icon=ft.icons.SETTINGS,
+                    #     content=ft.Text("This is Tab 3"),
+                    # ),
                     ft.Tab(
                         text="Delete Your Account",
                         icon=ft.icons.SETTINGS,

@@ -1,6 +1,5 @@
 import flet as ft
 from flet import (
-    AppBar,
     Card,
     Column,
     Container,
@@ -12,8 +11,6 @@ from flet import (
     Text,
     icons
 )
-
-
 class ScrollCardList():
     def __init__(
         self,
@@ -25,11 +22,11 @@ class ScrollCardList():
         super().__init__(*args, **kwargs)
         self.page = page
         # page title
-        contents.controls.append(ft.Text("一覧画面", size=30, weight="bold"))
+        contents.controls.append(ft.Text("開催セミナー一覧", size=30, weight="bold"))
         lv = ft.ListView(expand=True, spacing=15, auto_scroll=False)
-        hosts = []
+        seminars_arr = []
         for i in range(30):
-            hosts.append(
+            seminars_arr.append(
                 ft.Container(
                     content=ft.Card(
                         content=ft.Container(
@@ -37,13 +34,13 @@ class ScrollCardList():
                                 [
                                     ft.ListTile(
                                         title=ft.Text(
-                                            "The Enchanted Nightingale"),
+                                            "Python",weight=ft.FontWeight.W_700),
                                         subtitle=ft.Text(
-                                            "Music by Julie Gable. Lyrics by Sidney Stein."
+                                            "Pythonの基礎を理解しよう"
                                         ),
                                     ),
                                     ft.Row(
-                                        [ft.TextButton("Check!"),],
+                                        [ft.TextButton("詳細確認"),],
                                         alignment=ft.MainAxisAlignment.END,
                                     ),
                                 ]
@@ -56,13 +53,12 @@ class ScrollCardList():
                     col={"sm": 6, "md": 6, "xl": 4},
                 )
             )
-        hosts_seminars = Container(
+        seminars = Container(
             ft.ResponsiveRow(
-                hosts,
+                seminars_arr,
                 alignment=ft.MainAxisAlignment.SPACE_BETWEEN
             ),
             margin=ft.margin.only(top=10, left=20),
         )
-        lv.controls.append(hosts_seminars)
-
+        lv.controls.append(seminars)
         contents.controls.append(lv)
