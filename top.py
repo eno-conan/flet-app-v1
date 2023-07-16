@@ -13,6 +13,11 @@ from flet import (
     TextButton
 )
 import datetime
+import json
+import os
+import requests
+from dotenv import load_dotenv
+load_dotenv()
 
 
 class Top():
@@ -25,6 +30,13 @@ class Top():
     ):
         super().__init__(*args, **kwargs)
         self.page = page
+
+        # データ取得
+        # url = os.getenv('WORKERS_URL')
+        # response = requests.get(url)
+        # result = response.json()
+        # print(result)
+
         lv = ft.ListView(expand=6, spacing=15, auto_scroll=False)
         img = ft.Image(
             src=f"icons/flet.png",

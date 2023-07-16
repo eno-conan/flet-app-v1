@@ -150,7 +150,6 @@ class ResponsiveMenuLayout(Row):
 
     def _route_change(self, route):
         self.from_route = self.page.route
-        # print(route)
         # ログアウトしたときはトップページ表示
         if route == '/logout':
             route = '/'
@@ -158,8 +157,6 @@ class ResponsiveMenuLayout(Row):
             route = '/setting-account'
         try:
             page_number = self.routes.index(route)
-            # if '/setting-account/detail' in route:
-            #     page_number = 4
         except ValueError:
             page_number = 0
 
