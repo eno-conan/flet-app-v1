@@ -129,6 +129,7 @@ class ResponsiveMenuLayout(Row):
         if not dimension_minimized or self._panel_visible:
             self.navigation_rail.extended = value
 
+        self.from_route = self.page.route
         # タブ切り替えで実行
     def _navigation_change(self, e):
         # 画面の表示内容更新
@@ -145,19 +146,10 @@ class ResponsiveMenuLayout(Row):
             content_page.visible = page_number == i
         #   if troute.match("/"):
         #     self.page.go("/boards")
-        # elif troute.match("/board/:id"):
-        #     if int(troute.id) > len(self.store.get_boards()):
-        #         self.page.go("/")
-        #         return
-        #     self.layout.set_board_view(int(troute.id))
-        # elif troute.match("/boards"):
-        #     self.layout.set_all_boards_view()
-        # elif troute.match("/members"):
-        #     self.layout.set_members_view()
-        # self.page.update()
         # クリックしたタブに合わせて表示内容更新
 
     def _route_change(self, route):
+        self.from_route = self.page.route
         # print(route)
         # ログアウトしたときはトップページ表示
         if route == '/logout':

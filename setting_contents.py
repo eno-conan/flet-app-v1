@@ -97,7 +97,8 @@ class SettingContents():
         )
 
         def change_tab_event(e):
-            print(tabs.selected_index)
+            pass
+            # print(tabs.selected_index)
             # tabs.selected_index = 1
             # page.update()
 
@@ -136,6 +137,7 @@ class SettingContents():
             ],
             expand=True,
         )
+        self.tabs = tabs
         # 各タブの土台構築
         lv = ft.ListView(expand=True, spacing=5, auto_scroll=False)
         tab_bar_contents = Container(
@@ -144,6 +146,9 @@ class SettingContents():
         )
         lv.controls.append(tab_bar_contents)
         contents.controls.append(lv)
+
+    # def change_tab_event(self):
+    #     print(self.tabs.selected_index)
 
 # 参考（page.views.pop）
 # https://flet.dev/docs/guides/python/navigation-and-routing
