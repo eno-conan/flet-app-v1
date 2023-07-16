@@ -21,6 +21,7 @@ from add_form import TextFieldsAndSubmit
 from card_list import ScrollCardList
 from card_list_infinite import ScrollCardListInfinite
 from setting_contents import SettingContents
+from top import Top
 
 from flet.auth.providers.google_oauth_provider import GoogleOAuthProvider
 import os
@@ -105,21 +106,7 @@ if __name__ == "__main__":
         # ここの分岐とPathのところの分岐を上手く共通化できそう。
         contents = Column(expand=True, auto_scroll=False)
         if title == "Top":
-            contents.controls.append(Text("Top画面", size=32))
-            img = ft.Image(
-                src=f"icons/flet.png",
-                width=100,
-                height=100,
-                fit=ft.ImageFit.CONTAIN,
-            )
-            contents.controls.append(img)
-
-            def check_detail(e):
-                page.go("/setting-account/1")
-
-            check_detail_button = ElevatedButton(
-                "もっと確認する", on_click=check_detail)
-            contents.controls.append(check_detail_button)
+            Top(page,contents)
         elif title == "Card List":
             ScrollCardList(page, contents)
             # ScrollCardListInfinite(page, contents)
