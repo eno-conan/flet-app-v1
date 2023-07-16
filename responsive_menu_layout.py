@@ -103,7 +103,6 @@ if __name__ == "__main__":
     # main_contentsのレイアウトをこれで統一
 
     def create_page(page: Page, title: str):
-        # ここの分岐とPathのところの分岐を上手く共通化できそう。
         contents = Column(expand=True, auto_scroll=False)
         if title == "Top":
             Top(page,contents)
