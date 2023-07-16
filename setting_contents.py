@@ -96,44 +96,51 @@ class SettingContents():
             # on_click=show_detail
         )
 
+        def change_tab_event(e):
+            print(tabs.selected_index)
+            # tabs.selected_index = 1
+            # page.update()
+
+        tabs = ft.Tabs(
+            on_change=change_tab_event,
+            selected_index=0,
+            animation_duration=300,
+            tabs=[
+                ft.Tab(
+                    text="Check Participate seminar",
+                    # tab_content=ft.Icon(ft.icons.SEARCH),
+                    content=participate_seminars),
+                ft.Tab(
+                    text="Check Host seminar",
+                    content=hosts_seminars
+                ),
+                # ft.Tab(
+                #     text="Update User name (password)",
+                #     # icon=ft.icons.SETTINGS,
+                #     content=ft.Text("This is Tab 3"),
+                # ),
+                ft.Tab(
+                    text="Delete Your Account",
+                    icon=ft.icons.SETTINGS,
+                    content=Container(
+                        Column(
+                            controls=[
+                                delete_account_button
+                            ],
+                            expand=True,
+                            scroll=True,
+                        ),
+                        margin=ft.margin.only(top=20, left=20),
+                    ),
+                ),
+            ],
+            expand=True,
+        )
         # 各タブの土台構築
         lv = ft.ListView(expand=True, spacing=5, auto_scroll=False)
         tab_bar_contents = Container(
             margin=ft.margin.only(top=5, left=10),
-            content=ft.Tabs(
-                selected_index=0,
-                animation_duration=300,
-                tabs=[
-                    ft.Tab(
-                        text="Check Host seminar",
-                        content=hosts_seminars
-                    ),
-                    ft.Tab(
-                        text="Check Participate seminar",
-                        # tab_content=ft.Icon(ft.icons.SEARCH),
-                        content=participate_seminars),
-                    # ft.Tab(
-                    #     text="Update User name (password)",
-                    #     # icon=ft.icons.SETTINGS,
-                    #     content=ft.Text("This is Tab 3"),
-                    # ),
-                    ft.Tab(
-                        text="Delete Your Account",
-                        icon=ft.icons.SETTINGS,
-                        content=Container(
-                             Column(
-                                 controls=[
-                                     delete_account_button
-                                 ],
-                                 expand=True,
-                                 scroll=True,
-                             ),
-                            margin=ft.margin.only(top=20, left=20),
-                        ),
-                    ),
-                ],
-                expand=True,
-            )
+            content=tabs
         )
         lv.controls.append(tab_bar_contents)
         contents.controls.append(lv)

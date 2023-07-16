@@ -162,6 +162,8 @@ class ResponsiveMenuLayout(Row):
         # ログアウトしたときはトップページ表示
         if route == '/logout':
             route = '/'
+        if route == '/setting-account/1':
+            route = '/setting-account'
         try:
             page_number = self.routes.index(route)
             # if '/setting-account/detail' in route:

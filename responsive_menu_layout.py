@@ -113,6 +113,13 @@ if __name__ == "__main__":
                 fit=ft.ImageFit.CONTAIN,
             )
             contents.controls.append(img)
+
+            def check_detail(e):
+                page.go("/setting-account/1")
+
+            check_detail_button = ElevatedButton(
+                "もっと確認する", on_click=check_detail)
+            contents.controls.append(check_detail_button)
         elif title == "Card List":
             ScrollCardList(page, contents)
             # ScrollCardListInfinite(page, contents)
