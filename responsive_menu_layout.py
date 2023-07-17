@@ -44,54 +44,7 @@ if __name__ == "__main__":
             bgcolor=ft.colors.BLUE_ACCENT_700
         )
 
-        pages = [
-            (
-                dict(
-                    icon=ft.icons.HOUSE_OUTLINED,
-                    selected_icon=ft.icons.HOUSE,
-                    label="Top",
-                ),
-                create_page(
-                    page,
-                    "Top",
-                ),
-            ),
-            (
-                dict(
-                    icon=ft.icons.FEATURED_PLAY_LIST_OUTLINED,
-                    selected_icon=ft.icons.FEATURED_PLAY_LIST_ROUNDED,
-                    label="Card List",
-                ),
-                create_page(
-                    page,
-                    "Card List",
-                ),
-            ),
-            (
-                dict(
-                    icon=ft.icons.ADD_BOX_OUTLINED,
-                    selected_icon=ft.icons.ADD_BOX,
-                    label="Add Form",
-                ),
-                create_page(
-                    page,
-                    "Add Form",
-                ),
-            ),
-            (
-                dict(
-                    icon=ft.icons.SETTINGS_OUTLINED,
-                    selected_icon=ft.icons.SETTINGS,
-                    label="Setting Account",
-                ),
-                create_page(
-                    page,
-                    "Setting Account",
-                ),
-            ),
-        ]
-
-        menu_layout = ResponsiveMenuLayout(page, pages)
+        menu_layout = ResponsiveMenuLayout(page)
         page.add(menu_layout)
         menu_button.on_click = lambda e: menu_layout.toggle_navigation()
 
@@ -101,20 +54,5 @@ if __name__ == "__main__":
         page.update()
 
     # main_contentsのレイアウトをこれで統一
-
-    def create_page(page: Page, title: str):
-        contents = Column(expand=True, auto_scroll=False)
-        if title == "Top":
-            Top(page,contents)
-        elif title == "Card List":
-            ScrollCardList(page, contents)
-            # ScrollCardListInfinite(page, contents)
-        elif title == "Add Form":
-            TextFieldsAndSubmit(page, contents)
-        elif title == "Setting Account":
-            SettingContents(page, contents)
-        else:
-            contents.controls.append(ft.Text("Others"))
-        return contents
 
     ft.app(target=main, port=8550, assets_dir="assets", view=ft.WEB_BROWSER)

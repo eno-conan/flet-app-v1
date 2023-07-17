@@ -12,13 +12,18 @@ from flet import (
     VerticalDivider,
 )
 from flet.utils import slugify
+from add_form import TextFieldsAndSubmit
+from card_list import ScrollCardList
+from card_list_infinite import ScrollCardListInfinite
+from setting_contents import SettingContents
+from top import Top
 
 
 class ResponsiveMenuLayout(Row):
     def __init__(
         self,
         page: Page,
-        pages,
+        # pages,
         *args,
         support_routes=True,
         menu_extended=True,
@@ -29,8 +34,68 @@ class ResponsiveMenuLayout(Row):
     ):
         super().__init__(*args, **kwargs)
         self.page = page
-        # self.page.window_width = 1000
-        self.pages = pages
+
+        def create_page(page: Page, title: str):
+            contents = Column(expand=True, auto_scroll=False)
+            if title == "Top":
+                Top(page,contents)
+            elif title == "Card List":
+                ScrollCardList(page, contents)
+                # ScrollCardListInfinite(page, contents)
+            elif title == "Add Form":
+                TextFieldsAndSubmit(page, contents)
+            elif title == "Setting Account":
+                SettingContents(page, contents)
+            else:
+                contents.controls.append(ft.Text("Others"))
+            return contents
+
+        self.pages = [
+            (
+                dict(
+                    icon=ft.icons.HOUSE_OUTLINED,
+                    selected_icon=ft.icons.HOUSE,
+                    label="Top",
+                ),
+                create_page(
+                    page,
+                    "Top",
+                ),
+            ),
+            (
+                dict(
+                    icon=ft.icons.FEATURED_PLAY_LIST_OUTLINED,
+                    selected_icon=ft.icons.FEATURED_PLAY_LIST_ROUNDED,
+                    label="Card List",
+                ),
+                create_page(
+                    page,
+                    "Card List",
+                ),
+            ),
+            (
+                dict(
+                    icon=ft.icons.ADD_BOX_OUTLINED,
+                    selected_icon=ft.icons.ADD_BOX,
+                    label="Add Form",
+                ),
+                create_page(
+                    page,
+                    "Add Form",
+                ),
+            ),
+            (
+                dict(
+                    icon=ft.icons.SETTINGS_OUTLINED,
+                    selected_icon=ft.icons.SETTINGS,
+                    label="Setting Account",
+                ),
+                create_page(
+                    page,
+                    "Setting Account",
+                ),
+            ),
+        ]
 
         self._minimize_to_icons = minimize_to_icons
         self._landscape_minimize_to_icons = landscape_minimize_to_icons
@@ -38,7 +103,7 @@ class ResponsiveMenuLayout(Row):
         self._support_routes = support_routes
         self.expand = True
         self.navigation_items = [
-            navigation_item for navigation_item, _ in pages]
+            navigation_item for navigation_item, _ in self.pages]
         # slugify：'Menu in landscape' to 'menu-in-landscape'
         self.routes = [
             f"/{item.pop('route', None) or slugify(item['label'])}"
@@ -48,7 +113,7 @@ class ResponsiveMenuLayout(Row):
         self.update_destinations()
         self._menu_extended = menu_extended
         self.navigation_rail.extended = menu_extended
-        page_contents = [page_content for _, page_content in pages]
+        page_contents = [page_content for _, page_content in self.pages]
         self.menu_panel = Row(
             controls=[self.navigation_rail, VerticalDivider(width=1)],
             spacing=0,
