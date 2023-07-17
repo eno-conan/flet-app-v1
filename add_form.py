@@ -13,6 +13,9 @@ from flet import (
     TextButton
 )
 import datetime
+import json
+import os
+import requests
 
 
 class TextFieldsAndSubmit():
@@ -46,13 +49,13 @@ class TextFieldsAndSubmit():
         def button_clicked(e):
             try:
                 # POSTリクエスト作成
-                # url = os.getenv('WORKERS_URL')
-                # data = {
-                #     'CompanyName': seminar_name_textfield.value,
-                #     'ContactName': description_textfield.value,
-                # }
-                # data_encode = json.dumps(data)
-                # requests.post(url, data=data_encode)
+                url = os.getenv('WORKERS_URL')
+                data = {
+                    'CompanyName': seminar_name_textfield.value,
+                    'ContactName': description_textfield.value,
+                }
+                data_encode = json.dumps(data)
+                requests.post(url, data=data_encode)
                 print(seminar_name_textfield.value,
                       description_textfield.value,
                       category_text.value,

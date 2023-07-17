@@ -32,10 +32,11 @@ class Top():
         self.page = page
 
         # データ取得
-        # url = os.getenv('WORKERS_URL')
-        # response = requests.get(url)
-        # result = response.json()
-        # print(result)
+        result = [{'CustomerId': 1, 'CompanyName': 'Alfreds Futterkiste', 'ContactName': 'Maria Anders'}, {'CustomerId': 2, 'CompanyName': 'Around the Horn', 'ContactName': 'Thomas Hardy'}, {'CustomerId': 3, 'CompanyName': 'Bs Beverages', 'ContactName': 'Victoria Ashworth'}, {'CustomerId': 4, 'CompanyName': 'Bs Beverages', 'ContactName': 'Random Name'}, {'CustomerId': 36, 'CompanyName': 'add', 'ContactName': 'add'}]
+        url = os.getenv('WORKERS_URL')
+        response = requests.get(url)
+        result = response.json()
+        print(result)
 
         lv = ft.ListView(expand=6, spacing=15, auto_scroll=False)
         img = ft.Image(
@@ -53,7 +54,7 @@ class Top():
             ),
         )
         hosts = Column(expand=True)
-        for _ in range(3):
+        for data in result:
             hosts.controls.append(
                 ft.Card(
                     content=ft.Container(
@@ -61,9 +62,9 @@ class Top():
                             [
                                 ft.ListTile(
                                     title=ft.Text(
-                                        "Javaは簡単ではない", weight=ft.FontWeight.W_700),
+                                        data["CompanyName"], weight=ft.FontWeight.W_700),
                                     subtitle=ft.Text(
-                                        "Javaは決して簡単ではない・・・"
+                                        data["ContactName"]
                                     ),
                                 ),
                                 ft.Row(

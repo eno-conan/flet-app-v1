@@ -6,6 +6,8 @@ https://flet.dev/docs/guides/python/getting-started
 
 https://rollbar.com/blog/python-typeerror-nonetype-object-not-subscriptable/
 
+### 過去のコミットに一時的に戻る
+https://qiita.com/yu_andante/items/866e45d771b28cf05bf2
 
 ## Features
 
