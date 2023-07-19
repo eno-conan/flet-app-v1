@@ -18,17 +18,17 @@ import os
 import requests
 
 
-class TextFieldsAndSubmit():
+class AddForm():
     def __init__(
         self,
         page: Page,
-        contents: Column,
         * args,
         **kwargs,
     ):
         super().__init__(*args, **kwargs)
         self.page = page
-        page.dialog = ft.AlertDialog()
+        self.page.dialog = ft.AlertDialog()
+        self.contents = Column(expand=True, auto_scroll=False)
 
         def reset_state():
             # 入力値初期化
@@ -65,8 +65,7 @@ class TextFieldsAndSubmit():
 
                 # 初期表示状態に戻す
                 reset_state()
-
-                page.update()
+                self.page.update()
             except Exception as e:
                 print(e)
                 # msg_failed_add_customer.visible = True
@@ -84,7 +83,7 @@ class TextFieldsAndSubmit():
                     return
                 else:
                     submit_button.disabled = False
-            page.update()
+            self.page.update()
 
         # セミナー名・概要=========================
         invalid_msg_seminar_name_description = Row(
@@ -100,7 +99,7 @@ class TextFieldsAndSubmit():
             invalid_msg_seminar_name_description.visible = True
             if not seminar_name_textfield.value == "" and not description_textfield.value == "":
                 invalid_msg_seminar_name_description.visible = False
-            page.update()
+            self.page.update()
             update_disable_submit_button()
 
         seminar_name_textfield = ft.TextField(
@@ -150,7 +149,7 @@ class TextFieldsAndSubmit():
                     invalid_msg_participates.visible = False
             except ValueError:
                 pass
-            page.update()
+            self.page.update()
             update_disable_submit_button()
 
         participates_textfield = ft.TextField(
@@ -184,7 +183,7 @@ class TextFieldsAndSubmit():
         # カテゴリ=========================
         def category_dropdown_changed(e):
             category_text.value = dd.value
-            page.update()
+            self.page.update()
 
         category_text = ft.Text()
         categories_arr = []
@@ -243,7 +242,7 @@ class TextFieldsAndSubmit():
             except:
                 invalid_msg_date.visible = True
             update_disable_submit_button()
-            page.update()
+            self.page.update()
 
         date_textfield = ft.TextField(
             height=50,
@@ -294,7 +293,7 @@ class TextFieldsAndSubmit():
                     if int(start_minute.value) >= int(end_minute.value):
                         invalid_msg_datetime.visible = True
             update_disable_submit_button()
-            page.update()
+            self.page.update()
 
         start_hour = ft.Text()
         end_hour = ft.Text()
@@ -303,12 +302,12 @@ class TextFieldsAndSubmit():
 
         def start_hour_dropdown_changed(e):
             start_hour.value = start_hour_dd.value
-            page.update()
+            self.page.update()
             change_start_end_time()
 
         def end_hour_dropdown_changed(e):
             end_hour.value = end_hour_dd.value
-            page.update()
+            self.page.update()
             change_start_end_time()
 
         for i in range(1, 25):
@@ -334,12 +333,12 @@ class TextFieldsAndSubmit():
 
         def start_minute_dropdown_changed(e):
             start_minute.value = start_minute_dd.value
-            page.update()
+            self.page.update()
             change_start_end_time()
 
         def end_minute_dropdown_changed(e):
             end_minute.value = end_minute_dd.value
-            page.update()
+            self.page.update()
             change_start_end_time()
 
         for i in ['00', '15', '30', '45']:
@@ -407,7 +406,7 @@ class TextFieldsAndSubmit():
 
         def close_banner(e):
             page.banner.open = False
-            page.update()
+            self.page.update()
 
         page.banner = ft.Banner(
             content_padding=ft.padding.only(
@@ -426,7 +425,7 @@ class TextFieldsAndSubmit():
         )
 
         def open_dlg_modal(e):
-            page.dialog = ft.AlertDialog(
+            self.page.dialog = ft.AlertDialog(
                 modal=True,
                 title=ft.Text("Confirm Create Seminar"),
                 content=ft.Container(
@@ -473,12 +472,12 @@ class TextFieldsAndSubmit():
                 actions_alignment=ft.MainAxisAlignment.END,
                 on_dismiss=lambda e: print("Modal dialog dismissed!"),
             )
-            page.dialog.open = True
-            page.update()
+            self.page.dialog.open = True
+            self.page.update()
 
         def close_dlg(e):
-            page.dialog.open = False
-            page.update()
+            self.page.dialog.open = False
+            self.page.update()
 
         # Submitボタン=========================
         submit_button = ft.ElevatedButton(
@@ -505,4 +504,7 @@ class TextFieldsAndSubmit():
                 ],
             ))
         # 表示内容
-        contents.controls.append(lv)
+        self.contents.controls.append(lv)
+
+    def get_content(self):
+        return self.contents

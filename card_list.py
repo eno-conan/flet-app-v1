@@ -11,18 +11,18 @@ from flet import (
     Text,
     icons
 )
-class ScrollCardList():
+class ScrollSeminarList():
     def __init__(
         self,
         page: Page,
-        contents: Column,
         * args,
         **kwargs,
     ):
         super().__init__(*args, **kwargs)
         self.page = page
         # page title
-        contents.controls.append(ft.Text("開催セミナー一覧", size=30, weight="bold"))
+        self.contents = Column(expand=True, auto_scroll=False)
+        self.contents.controls.append(ft.Text("開催セミナー一覧", size=30, weight="bold"))
         lv = ft.ListView(expand=True, spacing=15, auto_scroll=False)
         seminars_arr = []
         for i in range(30):
@@ -61,4 +61,7 @@ class ScrollCardList():
             margin=ft.margin.only(top=10, left=20),
         )
         lv.controls.append(seminars)
-        contents.controls.append(lv)
+        self.contents.controls.append(lv)
+
+    def get_content(self):
+        return self.contents

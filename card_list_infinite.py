@@ -15,12 +15,12 @@ class ScrollCardListInfinite():
     def __init__(
         self,
         page: Page,
-        contents: Column,
         * args,
         **kwargs,
     ):
         super().__init__(*args, **kwargs)
         self.page = page
+        self.contents = Column(expand=True, auto_scroll=False)
 
         def my_scroll(e: ft.OnScrollEvent):
             # print(f'e.pixels:{e.pixels}')
@@ -90,8 +90,11 @@ class ScrollCardListInfinite():
                 )
             ))
 
-        contents.controls.append(lv)
-        contents.on_scroll = my_scroll
+        self.contents.controls.append(lv)
+        self.contents.on_scroll = my_scroll
+
+    def get_content(self):
+        return self.contents
 
 # Column > Container > Column > Container
 # https://www.youtube.com/watch?v=Zx4m5-m8Fs4

@@ -14,12 +14,12 @@ class SettingContents():
     def __init__(
         self,
         page: Page,
-        contents: Column,
         * args,
         **kwargs,
     ):
         super().__init__(*args, **kwargs)
         self.page = page
+        self.contents = Column(expand=True, auto_scroll=False)
 
         # タブ「主催セミナー一覧」
         hosts = Column(expand=True,)
@@ -145,10 +145,7 @@ class SettingContents():
             content=tabs
         )
         lv.controls.append(tab_bar_contents)
-        contents.controls.append(lv)
+        self.contents.controls.append(lv)
 
-    # def change_tab_event(self):
-    #     print(self.tabs.selected_index)
-
-# 参考（page.views.pop）
-# https://flet.dev/docs/guides/python/navigation-and-routing
+    def get_content(self):
+        return self.contents

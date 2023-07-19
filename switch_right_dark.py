@@ -28,6 +28,7 @@ class ToggleDarkLight():
             # プログレスバー表示
             page.splash.visible = True
             page.theme_mode = "light" if page.theme_mode == "dark" else "dark"
+            # ft.Theme()
             page.update()
 
             # アニメーション適用のための時間確保(1s)

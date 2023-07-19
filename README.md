@@ -1,60 +1,48 @@
-# ResponsiveMenuLayout
-page.add(lv) #今更だけど、page.addって何？
+### 公式Docs
+https://flet.dev/docs/
+
+### github
+https://github.com/flet-dev/flet
+
+以下リンクに関する学習記事です。
 
 https://flet.dev/docs/guides/python/getting-started
 
+- cloudflare_pagesフォルダ
+  - `main.py`:Publishing a static website
+  - `runtime.txt`:PythonのVersion
+  - `requirements.txt`：必要なライブラリ定義
 
-https://rollbar.com/blog/python-typeerror-nonetype-object-not-subscriptable/
+- python_guideフォルダ
+  - `auth.py`:Authentication
+  - `storage.py`:Client storageとSession storage
+  - `encrypt_decrypt.py`:Encrypting sensitive data
+  - `package/packaging_desktop_app.py`:Packaging desktop app
 
-### 過去のコミットに一時的に戻る
-https://qiita.com/yu_andante/items/866e45d771b28cf05bf2
+```
+flet run transper_pointer.py -d
+```
 
-## Features
 
-**Basic landscape layout, menu shown by default**
+# Controls
+https://flet.dev/docs/controls/text/#using-system-fonts
 
-<img width="678" alt="image" src="https://user-images.githubusercontent.com/5179247/182687976-2d13639e-bf67-42de-b8ce-6886415c8730.png">
+### CloudFlare Workders
+tsを選択する必要がないのかな？
 
-**Landscape layout, menu thinner**
 
-This is a parameter and a toggle in the demo app.
+### flyio
+https://flet.dev/docs/guides/python/deploying-web-app/hosting-providers/fly-io
 
-<img width="681" alt="image" src="https://user-images.githubusercontent.com/5179247/182690795-24dac5e1-67c2-49bb-ad51-b66500f8eef3.png">
 
-**Landscape layout, menu hidden (completely by default)**
+HTTPSConnectionPool(host='d1-tutorial.eno-conan.workers.dev', port=443): Max retries exceeded with url: /api/ (Caused by SSLError("Can't connect to HTTPS URL because the SSL module is not available."))
 
-<img width="669" alt="image" src="https://user-images.githubusercontent.com/5179247/182688450-1171017d-9724-4c88-903f-b202e6b511a2.png">
+https://pypi.org/project/pyOpenSSL/
+https://marusankakusikaku.jp/python/standard-library/urllib.request/
 
-**Landscape layout, menu shown as icons only instead of hidden**
+3.10.5
 
-This is a parameter of ResponsiveMenu, and a toggle in the demo app.
+pyOpenSSL==23.2.0
 
-<img width="684" alt="image" src="https://user-images.githubusercontent.com/5179247/182690945-31b575c2-6963-4d6a-8c1e-2113bff3161b.png">
 
-**Basic portrait layout, menu hidden by default**
-
-<img width="361" alt="image" src="https://user-images.githubusercontent.com/5179247/182688981-7a70dfa3-8801-426b-971a-f51439d44eaf.png">
-
-**Portrait layout, menu when shown is on top of the main content**
-
-Menu can be dismissed also by clicking outside the menu panel.
-
-<img width="359" alt="image" src="https://user-images.githubusercontent.com/5179247/182689617-bb9dab68-ab1e-4e38-81d1-9cad96177e3d.png">
-
-**Portrait layout, menu can also be minimized to icons instead of being hidden**
-
-With the `minimize_to_icons` parameter, controlled by a toggle in the demo app. Minimizing behavior can also be controlled separately in each orientation by the `landscape_minimize_to_icons` and `portrait_minimize_to_icons` parameters.
-
-<img width="359" alt="image" src="https://user-images.githubusercontent.com/5179247/182690086-676c0084-e8f2-4824-a0a6-f69ac7dba607.png">
-
-**Route support**
-
-Routes are supported by default in the web (selected page slug is part of the url, page can be opened directly with the right url).
-
-<img width="675" alt="image" src="https://user-images.githubusercontent.com/5179247/182772040-2180dabb-c36d-4d63-8448-aebae8199300.png">
-
-**Fine-tuning the NavigationRail**
-
-NavigationRail can be accessed to make changes directly, although there are some parameters that should be avoided.
-
-<img width="673" alt="image" src="https://user-images.githubusercontent.com/5179247/183242879-2ec3f7f7-b716-43d8-9d3f-788c3988b203.png">
+git remote add origin https://github.com/eno-conan/Flet_cloudflare-workers-d1-sample.git
