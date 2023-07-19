@@ -21,10 +21,11 @@ import flet as ft
 
 class Sidebar(UserControl):
 
-    def __init__(self, app_layout, page):
+    def __init__(self, app_layout, page:ft.Page):
         super().__init__()
         self.app_layout = app_layout
         self.nav_rail_visible = True
+        print(f"SideBar:{page.auth}")
         self.top_nav_items = [
             NavigationRailDestination(
                 label_content=Text("Top",size=16),

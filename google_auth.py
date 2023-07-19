@@ -35,6 +35,7 @@ class GoogleOAuth():
         # ログイン処理
         def login_google(e):
             self.page.login(provider)
+            # page.session.set("auth", True)
 
         # ログアウト処理
         def logout_google(e):

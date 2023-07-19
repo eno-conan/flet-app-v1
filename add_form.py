@@ -96,9 +96,11 @@ class AddForm():
         )
 
         def change_seminar_name_description(e):
-            invalid_msg_seminar_name_description.visible = True
+            invalid_msg_seminar_name_description.visible = False
             if not seminar_name_textfield.value == "" and not description_textfield.value == "":
                 invalid_msg_seminar_name_description.visible = False
+            else:
+                invalid_msg_seminar_name_description.visible = True
             self.page.update()
             update_disable_submit_button()
 
@@ -447,8 +449,9 @@ class AddForm():
                                 Text(category_text.value)
                            ]),
                             Row([
-                                Text("参加者"),
-                                Text(participates_textfield.value)
+                                Text("参加者："),
+                                Text(participates_textfield.value),
+                                Text("人"),
                             ]),
                             Row([
                                 Text("開催日："),
@@ -461,8 +464,11 @@ class AddForm():
                                 Text(" ~ "),
                                 Text(end_hour.value), Text(" : "),
                                 Text(end_minute.value),
-                            ]
-                            ),
+                            ]),
+                            Row([
+                                Text("公開設定："),
+                                Text("公開" if is_public.value else "下書き")
+                            ]),
                         ]
                     )),
                 actions=[
@@ -482,7 +488,7 @@ class AddForm():
         # Submitボタン=========================
         submit_button = ft.ElevatedButton(
             disabled=True,
-            text="Submit", on_click=open_dlg_modal)
+            text="確認", on_click=open_dlg_modal)
 
         lv = ft.ListView(expand=True, spacing=15, auto_scroll=False)
         lv.controls.append(

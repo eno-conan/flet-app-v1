@@ -38,6 +38,9 @@ class AppLayout(Row):
         super().__init__(*args, **kwargs)
         self.app = app
         self.page = page
+        # self.page = page.auth
+        print(self.page.auth)
+        # print(page.session.get("auth"))
         self.sidebar = Sidebar(self, page)
         self._was_portrait = self.is_portrait()
         self._panel_visible = self.is_landscape()

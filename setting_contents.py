@@ -108,11 +108,11 @@ class SettingContents():
             animation_duration=300,
             tabs=[
                 ft.Tab(
-                    text="Check Participate seminar",
+                    text="参加セミナー一覧",
                     # tab_content=ft.Icon(ft.icons.SEARCH),
                     content=participate_seminars),
                 ft.Tab(
-                    text="Check Host seminar",
+                    text="主催セミナー一覧",
                     content=hosts_seminars
                 ),
                 # ft.Tab(
@@ -121,8 +121,8 @@ class SettingContents():
                 #     content=ft.Text("This is Tab 3"),
                 # ),
                 ft.Tab(
-                    text="Delete Your Account",
-                    icon=ft.icons.SETTINGS,
+                    text="アカウント削除",
+                    # icon=ft.icons.SETTINGS,
                     content=Container(
                         Column(
                             controls=[
