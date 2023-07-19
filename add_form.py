@@ -71,6 +71,7 @@ class AddForm():
                 # msg_failed_add_customer.visible = True
                 # page.update()
 
+        # 確認ボタンの活性状態制御
         def update_disable_submit_button():
             # 入力前の段階では非活性確定
             for field in [seminar_name_textfield, description_textfield, participates_textfield,
@@ -114,27 +115,23 @@ class AddForm():
             label="Description", on_change=change_seminar_name_description)
 
         # 表示内容設定
-        seminar_name_description_area = Column()
-        seminar_name_description_area.controls.append(
+        seminar_name_description_area = Column([
             Container(content=Text("セミナー名・概要", size=20),
                       margin=ft.margin.symmetric(horizontal=20,)
-                      )
-        )
-        seminar_name_description_area.controls.append(
+                      ),
             Container(content=Column(
                 [seminar_name_textfield, description_textfield]
             ),
                 margin=ft.margin.symmetric(horizontal=30, vertical=5)
-            )
-        )
-        seminar_name_description_area.controls.append(
+            ),
             Container(content=invalid_msg_seminar_name_description,
                       margin=ft.margin.symmetric(
                           horizontal=30)
                       )
-        )
+        ])
 
         # 参加者数=========================
+        # バリデーションメッセージ
         invalid_msg_participates = Row(
             [
                 ft.Text("参加者は0より大きい数で入力してください",
@@ -144,6 +141,7 @@ class AddForm():
             visible=False
         )
 
+        # 入力情報更新時の処理
         def change_participates(e):
             invalid_msg_participates.visible = True
             try:
@@ -154,6 +152,7 @@ class AddForm():
             self.page.update()
             update_disable_submit_button()
 
+        # テキストフィールド
         participates_textfield = ft.TextField(
             keyboard_type=ft.KeyboardType.NUMBER,  # for mobile option
             height=50,
@@ -161,26 +160,21 @@ class AddForm():
             cursor_height=20,
             label="number", on_change=change_participates)
 
-        participates_area = Column()
-        participates_area.controls.append(
+        participates_area = Column([
             Container(content=Text("参加人数", size=20),
                       margin=ft.margin.symmetric(
                 horizontal=20,)
-            )
-        )
-        participates_area.controls.append(
+            ),
             Container(
                 content=participates_textfield,
                 margin=ft.margin.only(
                     left=30, top=10)
-            )
-        )
-        participates_area.controls.append(
+            ),
             Container(content=invalid_msg_participates,
                       margin=ft.margin.symmetric(
                           horizontal=30)
                       )
-        )
+        ])
 
         # カテゴリ=========================
         def category_dropdown_changed(e):
@@ -199,20 +193,17 @@ class AddForm():
         )
 
         # 表示内容設定
-        category_area = Column()
-        category_area.controls.append(
+        category_area = Column([
             Container(
                 Container(content=Text("カテゴリ選択", size=20),
                           margin=ft.margin.symmetric(horizontal=20,)
                           ),
-            )
-        )
-        category_area.controls.append(
+            ),
             Container(content=Column([dd]),
                       margin=ft.margin.symmetric(
                 horizontal=30, vertical=5)
             ),
-        )
+        ])
 
         # 開催日=========================
         invalid_msg_date = Row(
@@ -254,24 +245,19 @@ class AddForm():
             on_change=change_date)
 
         # 表示内容設定
-        date_area = Column()
-        date_area.controls.append(
+        date_area = Column([
             Container(content=Text("開催日時", size=20),
                       margin=ft.margin.symmetric(horizontal=20,)
                       ),
-        )
-        date_area.controls.append(
             Container(content=date_textfield,
                       margin=ft.margin.only(
                           left=30, top=10)
                       ),
-        )
-        date_area.controls.append(
             Container(content=invalid_msg_date,
                       margin=ft.margin.symmetric(
                           horizontal=30)
                       ),
-        )
+        ])
 
         # 開始時間・終了時間=========================
         invalid_msg_datetime = Row(
@@ -360,8 +346,7 @@ class AddForm():
         )
 
         # 表示内容設定
-        date_time_area = Column()
-        date_time_area.controls.append(
+        date_time_area = Column([
             Container(
                 content=Row(
                     [
@@ -376,35 +361,30 @@ class AddForm():
                 ),
                 margin=ft.margin.symmetric(
                     horizontal=30, vertical=5)
-            )
-        )
-        date_time_area.controls.append(
+            ),
             Container(content=invalid_msg_datetime,
                       margin=ft.margin.symmetric(
                           horizontal=30)
                       )
-        )
+        ])
 
         # 公開設定=========================
         is_public = ft.Switch(label="", value=False,)  # False：下書き
         # 表示内容設定
-        is_public_area = Column()
-        is_public_area.controls.append(
+        is_public_area = Column([
             Container(content=Text("公開設定", size=20),
-                      margin=ft.margin.symmetric(horizontal=20,)
-                      )
-        )
-        is_public_area.controls.append(
+                      margin=ft.margin.symmetric(
+                horizontal=20,)
+            ),
             Container(content=Text("選択：公開 / 非選択：下書き", size=14),
-                      margin=ft.margin.symmetric(horizontal=30,)
-                      )
-        )
-        is_public_area.controls.append(
+                      margin=ft.margin.symmetric(
+                horizontal=30,)
+            ),
             Container(content=is_public,
                       margin=ft.margin.symmetric(
                           horizontal=30)
                       )
-        )
+        ])
 
         def close_banner(e):
             page.banner.open = False
@@ -447,7 +427,7 @@ class AddForm():
                             Row([
                                 Text("カテゴリ："),
                                 Text(category_text.value)
-                           ]),
+                            ]),
                             Row([
                                 Text("参加者："),
                                 Text(participates_textfield.value),
