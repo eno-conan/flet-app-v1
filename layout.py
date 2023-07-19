@@ -35,21 +35,11 @@ class ResponsiveMenuLayout(Row):
         super().__init__(*args, **kwargs)
         self.page = page
 
-        def create_page(page: Page, title: str):
-            contents = Column(expand=True, auto_scroll=False)
-            if title == "Top":
-                Top(page,contents)
-            elif title == "Card List":
-                ScrollCardList(page, contents)
-                # ScrollCardListInfinite(page, contents)
-            elif title == "Add Form":
-                TextFieldsAndSubmit(page, contents)
-            elif title == "Setting Account":
-                SettingContents(page, contents)
-            else:
-                contents.controls.append(ft.Text("Others"))
-            return contents
-
+        self._minimize_to_icons = minimize_to_icons
+        self._landscape_minimize_to_icons = landscape_minimize_to_icons
+        self._portrait_minimize_to_icons = portrait_minimize_to_icons
+        self._support_routes = support_routes
+        self.expand = True
         self.pages = [
             (
                 dict(
@@ -57,7 +47,7 @@ class ResponsiveMenuLayout(Row):
                     selected_icon=ft.icons.HOUSE,
                     label="Top",
                 ),
-                create_page(
+                self.create_page(
                     page,
                     "Top",
                 ),
@@ -68,7 +58,7 @@ class ResponsiveMenuLayout(Row):
                     selected_icon=ft.icons.FEATURED_PLAY_LIST_ROUNDED,
                     label="Card List",
                 ),
-                create_page(
+                self.create_page(
                     page,
                     "Card List",
                 ),
@@ -79,7 +69,7 @@ class ResponsiveMenuLayout(Row):
                     selected_icon=ft.icons.ADD_BOX,
                     label="Add Form",
                 ),
-                create_page(
+                self.create_page(
                     page,
                     "Add Form",
                 ),
@@ -90,18 +80,12 @@ class ResponsiveMenuLayout(Row):
                     selected_icon=ft.icons.SETTINGS,
                     label="Setting Account",
                 ),
-                create_page(
+                self.create_page(
                     page,
                     "Setting Account",
                 ),
             ),
         ]
-
-        self._minimize_to_icons = minimize_to_icons
-        self._landscape_minimize_to_icons = landscape_minimize_to_icons
-        self._portrait_minimize_to_icons = portrait_minimize_to_icons
-        self._support_routes = support_routes
-        self.expand = True
         self.navigation_items = [
             navigation_item for navigation_item, _ in self.pages]
         # slugify：'Menu in landscape' to 'menu-in-landscape'
@@ -119,7 +103,7 @@ class ResponsiveMenuLayout(Row):
             spacing=0,
             tight=True,
         )
-        page.on_view_pop = self.view_pop
+        # page.on_view_pop = self.view_pop
 
         self.content_area = Column(page_contents, expand=True)
         self._was_portrait = self.is_portrait()
@@ -135,14 +119,29 @@ class ResponsiveMenuLayout(Row):
 
         self.page.on_resize = self.handle_resize
 
-    def view_pop(self, view):
-        self.page.views.pop()
-        top_view = self.page.views[-1]
-        # Noneの場合は、settingのトップに戻る
-        if self.page.route == '/setting-account':
-            self.page.go('/setting-account')
+    def create_page(self, page: Page, title: str):
+        contents = Column(expand=True, auto_scroll=False)
+        if title == "Top":
+            Top(page, contents)
+        elif title == "Card List":
+            ScrollCardList(page, contents)
+            # ScrollCardListInfinite(page, contents)
+        elif title == "Add Form":
+            TextFieldsAndSubmit(page, contents)
+        elif title == "Setting Account":
+            SettingContents(page, contents)
         else:
-            self.page.go('/')
+            contents.controls.append(ft.Text("Others"))
+        return contents
+
+    # def view_pop(self, view):
+    #     self.page.views.pop()
+    #     top_view = self.page.views[-1]
+    #     # Noneの場合は、settingのトップに戻る
+    #     if self.page.route == '/setting-account':
+    #         self.page.go('/setting-account')
+    #     else:
+    #         self.page.go('/')
 
     def select_page(self, page_number):
         # タブから各ページ選択
@@ -196,6 +195,7 @@ class ResponsiveMenuLayout(Row):
 
         self.from_route = self.page.route
         # タブ切り替えで実行
+
     def _navigation_change(self, e):
         # 画面の表示内容更新
         self._change_displayed_page()
@@ -214,6 +214,23 @@ class ResponsiveMenuLayout(Row):
         # クリックしたタブに合わせて表示内容更新
 
     def _route_change(self, route):
+        if route == '/top':
+            self.pages.pop(0)
+            self.pages.insert(0, (
+                dict(
+                    icon=ft.icons.HOUSE_OUTLINED,
+                    selected_icon=ft.icons.HOUSE,
+                    label="Top",
+                ),
+                self.create_page(
+                    self.page,
+                    "Top",
+                ),
+            )
+            )
+            page_contents = [page_content for _, page_content in self.pages]
+            self.content_area = Column(page_contents, expand=True)
+            self.page.update()
         self.from_route = self.page.route
         # ログアウトしたときはトップページ表示
         if route == '/logout':

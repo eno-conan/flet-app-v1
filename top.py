@@ -36,7 +36,7 @@ class Top():
         url = os.getenv('WORKERS_URL')
         response = requests.get(url)
         result = response.json()
-        print(result)
+        # print(result)
 
         lv = ft.ListView(expand=6, spacing=15, auto_scroll=False)
         img = ft.Image(
